@@ -1,0 +1,161 @@
+.container{
+    min-width: 100%;
+    display: flex;
+    flex-direction: row;
+    gap: 45px;
+    margin-top: 45px;
+    padding-left: 0%;
+}
+
+.filter{
+    border: none; 
+    border-radius: 8px; 
+    padding: 32px; 
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1); 
+    height: fit-content;      
+}
+.categories{
+    display: flex;
+    flex-direction: column;
+    gap: 15px;
+}
+
+.prices {
+    padding-top: 32px;  
+
+  } 
+
+.radio .ant-radio-wrapper {
+    padding: 8px 0px; 
+  }
+.container h1{
+    font-size: 23px;
+    font-weight: 400;
+    text-align: start;
+
+}
+.reset{
+    align-items: center;
+    display: flex;
+    justify-content: center;
+    padding-top: 32px;
+}
+.reset-button{
+    border: none;
+    padding: 8px;
+    background-color: #f92121;
+    color: white;
+    border-radius: 35px;
+    transition: 0.3s;
+   
+}
+.reset-button:hover{
+    background-color: #b03434;
+   
+}
+.ogprice{
+    color: #9d9d9d;
+    text-decoration: line-through;
+    padding-top: 0px;
+}
+.display-products{
+    margin-top: 20px;
+     
+}
+
+.display-products h2{
+    font-size: max(2vw, 24px);
+    font-weight: 500;
+    margin-bottom: 20px;
+}
+
+.display-list{
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(240px, 1fr));  
+    gap: 50px 30px;
+   
+}
+
+.products{
+    width: 100%;
+    margin: auto;
+    border-radius: 15px;
+    box-shadow: 0px 0px 10px #00000015;
+    transition: 0.3s;
+    animation: fadeIn 1s;
+}
+.products:hover {
+   scale: 1.02;
+ 
+}
+
+.product-image{
+    width: 100%;
+    border-radius: 15px 15px  0px 0px;
+}
+
+.product-info{
+    padding: 20px;
+
+}
+.product-image-container{
+    position: relative;
+}
+.product-image-container .add{
+    background-color: aliceblue;
+    width: 35px;
+    height: 35px;
+    position: absolute;
+    bottom: 12px;
+    right: 12px;
+    cursor: pointer;
+    border-radius: 50%;
+    align-items: center;
+    justify-content: center;
+    display: flex;
+    transition: 0.5s;
+}
+.add img{
+    width: 30px;
+    align-items: center;
+    padding: 3px;
+}
+.add:hover{
+    background-color: rgb(186, 206, 223);
+}
+
+.product-name{
+ display: flex;
+ justify-content: space-between;
+}
+.product-name p{
+    font-size: 20px;
+    font-weight: 500;
+}
+.product-name button{
+    border: none;
+    padding: 6px;
+    font-size: 12px;
+    border-radius: 50px;
+    background-color:#c83232;
+    color: white;
+    transition: 0.5s;
+}
+.product-name button:hover{
+background-color:#b03434;
+}
+
+.product-description{
+    color: #676767;
+    font-size: 14px;
+    text-align: start;
+}
+.product-price{
+    color: #c83232; 
+    font-size: 22px;
+    font-weight: 500;
+    margin: 10px 0px;
+    text-align: start;
+}
+
+

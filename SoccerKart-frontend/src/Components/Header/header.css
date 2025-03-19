@@ -1,0 +1,48 @@
+.header{
+    height: 36vw;
+    width: 100%;
+    margin: 30px auto;
+    background: url('../../assets/banner.png') no-repeat center;
+    background-size: cover;
+    position: relative;
+    border-radius: 20PX;
+
+}
+
+.header-content{
+    position: absolute;
+    gap: 1.5vw;
+    max-width: 50%;
+    bottom: 12%;
+    left: 8vw;
+    animation: fadeIn 3s;
+}
+
+.header-content h2{
+    color: whitesmoke;
+   
+    font-weight: 500;
+    font-size: max(3.5vw, 22px);
+
+}
+
+.header-content p{
+    color: white;
+    font-size: 1vw;
+}
+
+.header-content button{
+    border: none;
+    color: white;
+    font-weight: 400;
+    padding: 0.8vw 1.4vw;
+    background-color: #ff5757;
+    border-radius: 35px;
+    align-self: start;
+    transition: 0.5s;
+    
+}
+
+.header-content button:hover{
+    background-color: #b03434;
+}

@@ -1,0 +1,110 @@
+.navbar {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    width: 100vw;
+    max-width: 100%;
+    padding: 20px 0px;
+    border-bottom: 3px solid #ff5757; /* Fixed missing semicolon */
+    position: sticky;
+    top: 0; /* Ensures it sticks to the top */
+    /* left: 0; */
+    z-index: 1000; /* Ensures it stays above other elements */
+    background-color: white; /* Optional: Prevents transparency issues */
+}
+
+
+.head{
+    width: 100px;
+    cursor: pointer;  
+}
+
+
+.nav_menu {
+    align-items: center;
+    display: flex;
+    list-style: none;
+    gap: 20px; 
+    font-size: 18px; 
+}
+
+.navbar .active {
+    padding-bottom: 2px;
+    border-bottom: 2px solid #1c274c;
+    color: #1c274c;
+    text-decoration: none;
+}
+
+.navbar_right {
+    align-items: center;
+    display: flex;
+    list-style: none;
+    gap: 40px;
+}
+.navbar_right img{
+    width: 32px;
+    cursor: pointer;
+}
+
+.cart {
+    position: relative;
+}
+.cart .dot{
+    position: absolute;
+    min-width: 10px;
+    min-height: 10px;
+    background-color: tomato;
+    border-radius: 5px;
+    top: -3px;
+    right: -3px;
+    font-size: 9px;
+    text-align: center;
+    color: black;
+
+}
+.navbar_right input{
+    border: none;
+    margin: 6px;
+}
+.navbar_right form img{
+    padding-right: 12px;
+    width: 40px;
+}
+.navbar_right form{
+    border: 2px solid grey;
+    border-radius:50px;
+    gap: 20px;
+}
+
+.navlink{
+    text-decoration: none;
+    color: #1c274c;
+
+}
+.signup{
+   background: transparent;
+   text-decoration: none;
+   font-size: 16px;
+   color: black;
+   border:1px solid #ff5757;
+   padding: 10px 30px;
+   border-radius: 50px;
+   transition: 0.5s;
+   cursor: pointer;
+}
+.signup:hover{
+    
+    background-color: #ff5757;
+    transform: scale(1.1);
+    transition: 0.5s;
+}
+.user{
+    padding-right: 10px;
+}
+.user img{
+    width: 32px;
+    cursor: pointer;
+    padding-right: 8px;
+
+}
+
