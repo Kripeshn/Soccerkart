@@ -1,18 +1,22 @@
 .navbar {
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
     width: 100vw;
     max-width: 100%;
     padding: 20px 0px;
     border-bottom: 3px solid #ff5757; /* Fixed missing semicolon */
     position: sticky;
-    top: 0; /* Ensures it sticks to the top */
-    /* left: 0; */
+    top: 0; 
     z-index: 1000; /* Ensures it stays above other elements */
     background-color: white; /* Optional: Prevents transparency issues */
 }
 
+.navbar_container {
+    width: 90%;
+    margin: auto;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    max-width: 100%;
+}
 
 .head{
     width: 100px;
@@ -21,11 +25,13 @@
 
 
 .nav_menu {
-    align-items: center;
     display: flex;
+    align-items: center;
+    padding: 0;
+    margin-bottom: 0;
     list-style: none;
     gap: 20px; 
-    font-size: 18px; 
+    font-size: 20px; 
 }
 
 .navbar .active {
