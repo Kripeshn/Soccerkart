@@ -8,6 +8,23 @@ const Cart = () => {
   const [cart, setCart] = useCart();
   const [auth, setAuth] = useAuth();
   const navigate = useNavigate();
+  let df = 0;
+  const deliveryfee = () => {
+    let total = 0;
+    cart?.map((item) => {
+      total = total + item.price;
+    });
+    if(total != 0){
+      df = 100;
+    }
+    else {
+      df=0;
+    }
+    return df.toLocaleString("en-US", {
+      style: "currency",
+      currency: "INR",
+    });
+  }
 
   const totalPrice = () => {
     try {
@@ -15,10 +32,30 @@ const Cart = () => {
       cart?.map((item) => {
         total = total + item.price;
       });
+
       return total.toLocaleString("en-US", {
         style: "currency",
-        currency: "USD",
+        currency: "INR",
       });
+   
+    } catch (error) {
+      console.log(error);
+    }
+  };
+  const GtotalPrice = () => {
+    try {
+      let total = 0;
+      let gtotal = 0;
+      cart?.map((item) => {
+        total = total + item.price;
+        gtotal = total + df;
+      });
+
+      return gtotal.toLocaleString("en-US", {
+        style: "currency",
+        currency: "INR",
+      });
+    
     } catch (error) {
       console.log(error);
     }
@@ -68,9 +105,9 @@ const Cart = () => {
                       height="100px"
                     />
                     <p>{p.name}</p>
-                    <p>Rs. {p.price}</p>
+                    <p>₹ {p.price}</p>
                     <p>{p.quantity}</p>
-                    <p>Rs. {p.price * p.quantity}</p>
+                    <p>₹ {p.price * p.quantity}</p>
                     <button className="remove" onClick={() => removeCartItem(id)}>
                       X
                     </button>
@@ -80,6 +117,38 @@ const Cart = () => {
               ))}
 
           </div>
+<div className="cart-bottom">
+  <div className="cart-total">
+    <h2>  Cart total </h2>
+    <div>
+      <div className="cart-total-details">
+              <p>Subtotal</p>
+              <p>{totalPrice()}</p>
+      </div>
+      <hr />
+      <div className="cart-total-details">
+            <p>Delivery Fee</p>
+            <p>{deliveryfee()}</p>
+      </div>
+      <hr />
+      <div className="cart-total-details">
+            <p>Total</p>
+            <p>{GtotalPrice()}</p>
+      </div>
+      
+    </div>
+    <button>Proceed To Checkout</button>
+  </div>
+  <div className="cart-promocode">
+    <div>
+      <p>If you have a  promocode enter it here.</p>
+      <div className="cart-promocode-input">
+        <input type="text" placeholder='enter promocode' />
+        <button>Submit</button>
+      </div>
+    </div>
+  </div>
+</div>
           {/* <div className="col-md-4 text-center">
             <h2>Cart Summary</h2>
             <p>Total | Checkout | Payment</p>

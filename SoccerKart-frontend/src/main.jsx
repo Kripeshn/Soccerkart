@@ -17,6 +17,7 @@ createRoot(document.getElementById('root')).render(
       <SearchProvider>
       <CartProvider>      
       <BrowserRouter> 
+           
             <App />
             <Footers />
           </BrowserRouter> 

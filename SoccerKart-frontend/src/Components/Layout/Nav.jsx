@@ -1,5 +1,5 @@
 import React, { useState } from 'react'
-import { NavLink } from 'react-router-dom'
+import { NavLink, useNavigate } from 'react-router-dom'
 import styles from './nav.module.css'
 import { useAuth } from '../../context/auth'
 import toastr from 'toastr'
@@ -14,6 +14,8 @@ export default function Nav() {
   const [cart] = useCart();
   const [auth, setAuth] = useAuth();
   const [menu, setMenu] = useState(""); 
+  const navigate = useNavigate();
+
 
   const handleLogout = () => {
     setAuth({
@@ -25,6 +27,7 @@ export default function Nav() {
     localStorage.removeItem("auth");
     localStorage.removeItem("cart");
     toastr.success("Logged Out Successfully.")
+    navigate('/login');
   }
   return (
     <nav className={styles.navbar}>
@@ -90,7 +93,7 @@ export default function Nav() {
   <ul className="dropdown-menu mt-2">
     <li><NavLink to ={`/dashboard/${auth?.user?.role === 1 ? "admin" : "user"}`} className="dropdown-item" >Dashboard</NavLink></li>
     <li>
-       <NavLink onClick={handleLogout} className="dropdown-item" to= "/">Logout</NavLink>
+       <NavLink onClick={handleLogout} className="dropdown-item">Logout</NavLink>
       </li>
   </ul>
 </div>

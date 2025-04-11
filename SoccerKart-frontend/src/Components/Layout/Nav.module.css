@@ -4,7 +4,7 @@
     justify-content: space-between;
     width: 100vw;
     max-width: 100%;
-    padding: 20px 0px;
+    padding: 20px 40px;
     border-bottom: 3px solid #ff5757; /* Fixed missing semicolon */
     position: sticky;
     top: 0; /* Ensures it sticks to the top */

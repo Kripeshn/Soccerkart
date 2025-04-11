@@ -49,7 +49,9 @@ export default function App() {
 
         </Route> 
         <Route path= "home" element={<Home />}></Route> 
-        <Route path= "cart" element={<CartPage />}></Route> 
+        <Route path="/cart" element={<PrivateRoute/>}>
+        <Route path='' element={<Cart />}></Route>
+        </Route>
         <Route path= "search" element={<Search />}></Route> 
         <Route path= "forgot-password" element={<ForgotPassword />}></Route> 
         <Route path= "admin" element={<Admin />}></Route> 
