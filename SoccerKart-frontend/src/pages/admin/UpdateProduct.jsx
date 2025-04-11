@@ -1,4 +1,3 @@
-
 import React, { useState, useEffect } from "react";
 import AdminMenu from "./../../Components/Layout/AdminMenu";
 import toastr from "toastr";
@@ -46,7 +45,9 @@ const UpdateProduct = () => {
   //get all category
   const getAllCategory = async () => {
     try {
-      const { data } = await axios.get("http://localhost:8080/api/v1/category/get-category");
+      const { data } = await axios.get(
+        "http://localhost:8080/api/v1/category/get-category"
+      );
       if (data?.success) {
         setCategories(data?.category);
       }
@@ -73,10 +74,11 @@ const UpdateProduct = () => {
       productData.append("category", category);
       const { data } = axios.put(
         `http://localhost:8080/api/v1/product/update-product/${id}`,
-        productData, {
-            headers: {
-                "Authorization": localStorage.getItem('authToken'), // Include the token in the Authorization header
-            },
+        productData,
+        {
+          headers: {
+            Authorization: localStorage.getItem("authToken"), // Include the token in the Authorization header
+          },
         }
       );
       if (data?.success) {
@@ -94,13 +96,14 @@ const UpdateProduct = () => {
   //delete a product
   const handleDelete = async () => {
     try {
-    //   let answer = window.prompt("Are You Sure want to delete this product ? ");
-    //   if (!answer) return;
+      //   let answer = window.prompt("Are You Sure want to delete this product ? ");
+      //   if (!answer) return;
       const { data } = await axios.delete(
-        `http://localhost:8080/api/v1/product/delete-product/${id}`,  {
-            headers: {
-                "Authorization": localStorage.getItem('authToken'), // Include the token in the Authorization header
-            },
+        `http://localhost:8080/api/v1/product/delete-product/${id}`,
+        {
+          headers: {
+            Authorization: localStorage.getItem("authToken"), // Include the token in the Authorization header
+          },
         }
       );
       toastr.success("Product Deleted Successfully");
@@ -112,7 +115,7 @@ const UpdateProduct = () => {
   };
   return (
     <>
-        <Nav />
+      {/* <Nav /> */}
       <div className="container-fluid m-3 p-3">
         <div className="row">
           <div className="col-md-3">
@@ -128,10 +131,10 @@ const UpdateProduct = () => {
                 showSearch
                 className="form-select mb-3"
                 onChange={(value) => {
-                    setCategory(value);
+                  setCategory(value);
                 }}
                 value={category}
-                >
+              >
                 {categories?.map((c) => (
                   <Option key={c._id} value={c._id}>
                     {c.name}
@@ -147,7 +150,7 @@ const UpdateProduct = () => {
                     accept="image/*"
                     onChange={(e) => setPhoto(e.target.files[0])}
                     hidden
-                    />
+                  />
                 </label>
               </div>
               <div className="mb-3">
@@ -158,10 +161,10 @@ const UpdateProduct = () => {
                       alt="product_photo"
                       height={"200px"}
                       className="img img-responsive"
-                      />
+                    />
                   </div>
                 ) : (
-                    <div className="text-center">
+                  <div className="text-center">
                     <img
                       src={`http://localhost:8080/api/v1/product/product-photo/${id}`}
                       alt="product_photo"
@@ -187,7 +190,7 @@ const UpdateProduct = () => {
                   placeholder="write a description"
                   className="form-control"
                   onChange={(e) => setDescription(e.target.value)}
-                  />
+                />
               </div>
 
               <div className="mb-3">
@@ -197,7 +200,7 @@ const UpdateProduct = () => {
                   placeholder="write a Price"
                   className="form-control"
                   onChange={(e) => setPrice(e.target.value)}
-                  />
+                />
               </div>
               <div className="mb-3">
                 <input
@@ -206,17 +209,17 @@ const UpdateProduct = () => {
                   placeholder="write a quantity"
                   className="form-control"
                   onChange={(e) => setQuantity(e.target.value)}
-                  />
+                />
               </div>
               <div className="mb-3">
                 <Select
-                  variant ={false}
+                  variant={false}
                   placeholder="Select Shipping "
                   size="large"
                   showSearch
                   className="form-select mb-3"
                   onChange={(value) => {
-                      setShipping(value);
+                    setShipping(value);
                   }}
                   value={shipping ? "yes" : "No"}
                 >
@@ -237,9 +240,9 @@ const UpdateProduct = () => {
             </div>
           </div>
         </div>
-      </div>   
+      </div>
     </>
-  )
-}
+  );
+};
 
 export default UpdateProduct;

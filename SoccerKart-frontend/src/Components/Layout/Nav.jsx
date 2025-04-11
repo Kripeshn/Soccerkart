@@ -1,5 +1,5 @@
 import React, { useState } from 'react'
-import { NavLink, useNavigate } from 'react-router-dom'
+import { NavLink } from 'react-router-dom'
 import styles from './nav.module.css'
 import { useAuth } from '../../context/auth'
 import toastr from 'toastr'
@@ -8,18 +8,16 @@ import cartimg from '../../assets/cart.svg'
 import search from '../../assets/search.svg'
 import { useCart } from '../../context/cart'
 import { FaChevronDown } from "react-icons/fa"; // Import dropdown icon
-import SearchInput from '../Form/SearchInput'
-import profile from '../../assets/profile.svg'
+import SearchInput from "../Form/SearchInput";
+import profile from "../../assets/profile.svg";
 export default function Nav() {
   const [cart] = useCart();
   const [auth, setAuth] = useAuth();
   const [menu, setMenu] = useState(""); 
-  const navigate = useNavigate();
-
 
   const handleLogout = () => {
     setAuth({
-      ...auth, 
+      ...auth,
       user: null,
       token: "",
     });
@@ -27,36 +25,42 @@ export default function Nav() {
     localStorage.removeItem("auth");
     localStorage.removeItem("cart");
     toastr.success("Logged Out Successfully.")
-    navigate('/login');
   }
   return (
     <nav className={styles.navbar}>
-      <img className={styles.head} src={logo} alt="" />
-     <ul className={styles.nav_menu}>
-            <li>
-                <NavLink 
-                    to="/" 
-                    className={({ isActive }) => isActive ? styles.active : styles.navlink}
-                >
-                    Home
-                </NavLink>
-            </li>
-            <li>
-                <NavLink 
-                    to="/product" 
-                    className={({ isActive }) => isActive ? styles.active : styles.navlink}
-                >
-                    Products
-                </NavLink>
-            </li>
-            <li>
-                <NavLink 
-                    to="/about" 
-                    className={({ isActive }) => isActive ? styles.active : styles.navlink}
-                >
-                    About Us
-                </NavLink>
-            </li>
+      <div className={styles.navbar_container}>
+        <img className={styles.head} src={logo} alt="" />
+        <ul className={styles.nav_menu}>
+          <li>
+            <NavLink
+              to="/"
+              className={({ isActive }) =>
+                isActive ? styles.active : styles.navlink
+              }
+            >
+              Home
+            </NavLink>
+          </li>
+          <li>
+            <NavLink
+              to="/product"
+              className={({ isActive }) =>
+                isActive ? styles.active : styles.navlink
+              }
+            >
+              Products
+            </NavLink>
+          </li>
+          <li>
+            <NavLink
+              to="/about"
+              className={({ isActive }) =>
+                isActive ? styles.active : styles.navlink
+              }
+            >
+              About Us
+            </NavLink>
+          </li>
         </ul>
       <div className={styles.navbar_right}>
         <div className="">
@@ -93,13 +97,16 @@ export default function Nav() {
   <ul className="dropdown-menu mt-2">
     <li><NavLink to ={`/dashboard/${auth?.user?.role === 1 ? "admin" : "user"}`} className="dropdown-item" >Dashboard</NavLink></li>
     <li>
-       <NavLink onClick={handleLogout} className="dropdown-item">Logout</NavLink>
+       <NavLink onClick={handleLogout} className="dropdown-item" to= "/">Logout</NavLink>
       </li>
   </ul>
 </div>
+
         )
       }
+
+      </div>
       </div>
     </nav>
-  )
+  );
 }
