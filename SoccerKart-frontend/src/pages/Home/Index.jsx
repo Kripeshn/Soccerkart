@@ -162,11 +162,11 @@ export default function Index() {
           </div>
         </div>
         <div className="display-products">
-          <h2 className="display-heading">Our Products</h2>
+          <h2 id="our-products" className="display-heading">Our Products</h2>
           <div className="display-list">
             {products?.map((p) => (
-              <div key={p._id} className="products">
-                <div className="product-image-container">
+              <div key={p._id} className="products" onClick={() => navigate(`/product/${p.slug}`)}>
+                <div className="product-image-container" >
                   <img
                     src={`http://localhost:8080/api/v1/product/product-photo/${p._id}`}
                     className="product-image"
@@ -189,12 +189,12 @@ export default function Index() {
                 <div className="product-info">
                   <div className="product-name">
                     <h5>{p.name}</h5>
-                    <button
+                    {/* <button
                       className="more-info"
                       onClick={() => navigate(`/product/${p.slug}`)}
                     >
                       More Details
-                    </button>
+                    </button> */}
                   </div>
                   <h5 className="product-description">
                     {p.description.substring(0, 20)}...

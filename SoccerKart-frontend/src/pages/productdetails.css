@@ -7,7 +7,7 @@
     padding: 32px;
     box-shadow: 0px 0px 10px #00000015;
     margin-top: 40px;
-    margin-left: 30%;
+    
 }
 .locate{
     padding-top: 8px;
@@ -17,7 +17,12 @@
   display: inline-block;    
 
 }
+.product{
+    display: flex;
+    align-items: center;
+    justify-content: center;
 
+}
 .product-details{
     display: flex;
     flex-direction: column;

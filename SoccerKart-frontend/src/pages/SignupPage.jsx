@@ -4,6 +4,7 @@ import "./Signup.css";
 import { NavLink, useNavigate } from "react-router-dom";
 import axios from "axios";
 import toastr from "toastr";
+import logo from '../assets/logo1.png'
 
 export default function SignupPage() {
   const [name, setName] = useState();
@@ -51,6 +52,14 @@ export default function SignupPage() {
     <div>
       {/* <Nav /> */}
       <div className="signup-container">
+        <div className="intro">
+                  <div className="logo">
+                    <img src={logo} alt="" />
+                  </div>
+                  <div className="desc">
+                    Get all your football gears and accessories you want  Lorem ipsum dolor sit amet consectetur adipisicing elit. Sapiente fugiat dolorem acc 
+                  </div>
+                </div>
         <form
           className="signup-form"
           onSubmit={handleSubmit}
@@ -59,31 +68,34 @@ export default function SignupPage() {
         >
           <h2>Signup</h2>
           <div className="form-group">
-            <label htmlFor="username">Username</label>
+            {/* <label htmlFor="username">Username</label> */}
             <input
               type="text"
               id="username"
               name="username"
               onChange={(e) => setName(e.target.value)}
+              placeholder="Name"
               required
             />
           </div>
           <div className="form-group">
-            <label htmlFor="email">Email</label>
+            {/* <label htmlFor="email">Email</label> */}
             <input
               type="email"
               id="email"
               name="email"
               onChange={(e) => setEmail(e.target.value)}
+              placeholder="email"
               required
             />
           </div>
           <div className="form-group">
-            <label htmlFor="password">Password</label>
+            {/* <label htmlFor="password">Password</label> */}
             <input
               type="password"
               id="password"
               name="password"
+              placeholder="password"
               onChange={(e) => setPassword(e.target.value)}
               required
             />
@@ -98,6 +110,11 @@ export default function SignupPage() {
               placeholder="What is your favourite sports"
               required
             />
+          <div className="pas-sig">
+
+          <NavLink className='sign' to="../login">Already have an account?</NavLink>
+          <NavLink className='forgot' to="../login">Login</NavLink>
+          </div>
           </div>
           {/* <div className="form-group">
                     <label htmlFor="confirm-password">Confirm Password</label>
@@ -106,8 +123,6 @@ export default function SignupPage() {
           <button type="submit" className="signup-button">
             Signup
           </button>
-          <span>Have an existing account? </span>
-          <NavLink to="../login">Login</NavLink>
         </form>
       </div>
     </div>

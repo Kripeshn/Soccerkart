@@ -21,7 +21,7 @@ body{
 }
 
 .app-container{
-    width: 80%;
+    width: 90%;
     margin: auto; 
     flex: 1;
     display: flex;

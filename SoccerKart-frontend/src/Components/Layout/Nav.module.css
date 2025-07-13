@@ -87,6 +87,10 @@
     color: #1c274c;
 
 }
+a{
+    text-decoration: none;
+    color: #1c274c;
+}
 .signup{
    background: transparent;
    text-decoration: none;

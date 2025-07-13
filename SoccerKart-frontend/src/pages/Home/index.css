@@ -126,6 +126,7 @@
 
 .product-name{
  display: flex;
+ flex-direction: column-reverse;
  justify-content: space-between;
 }
 .product-name p{
@@ -134,7 +135,7 @@
 }
 .product-name button{
     border: none;
-    padding: 6px;
+    padding: 4px;
     font-size: 12px;
     border-radius: 50px;
     background-color:#c83232;

@@ -24,10 +24,10 @@ import Products from "./pages/admin/Products";
 import UpdateProduct from "./pages/admin/UpdateProduct";
 import Cart from "./pages/Cart/CartPage";
 import Search from "./pages/Search";
-import CartPage from "./pages/Cart/CartPage";
-import { Footer } from "antd/es/layout/layout";
-import Nav from "./Components/Layout/Nav";
-import Login from "./pages/login/Login";
+// import CartPage from "./pages/Cart/CartPage";
+// import { Footer } from "antd/es/layout/layout";
+// import Nav from "./Components/Layout/Nav";
+// import Login from "./pages/login/Login";
 
 export default function App() {
   return (

@@ -33,6 +33,7 @@ export default function Product() {
   };
   return (
     <div>
+      <Nav/>
       <p className="locate">Soccerkart/Home/{product.name}</p>
       <h1 className="text-center">Product Details</h1>
       <div className="product">

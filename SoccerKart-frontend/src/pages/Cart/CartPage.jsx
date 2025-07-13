@@ -77,6 +77,7 @@ const Cart = () => {
       <Nav />
   
         <div className="cart">
+          <h1 className='text-center pb-5' >Cart page</h1>
           <div className="cart-items">
             <div className='cart-items-title'>
               <p>Items</p>

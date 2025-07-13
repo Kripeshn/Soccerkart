@@ -7,10 +7,7 @@ const Hero = () => {
       <div className="header-content">
         <h2>Get your Football Accessories Here.</h2>
         <p>
-          Lorem ipsum dolor, sit amet consectetur adipisicing elit. Saepe,
-          beatae, quaerat explicabo nihil suscipit et reprehenderit numquam
-          odio, dignissimos aspernatur aperiam ea nemo fugit soluta sequi
-          expedita animi consectetur. Numquam?
+        Whether you're training for the big leagues or just kicking around with friends, we've got everything you need to elevate your game. From high-performance boots to durable balls and stylish kits, our accessories are designed to help you play harder, move faster, and look sharper. Don’t just play the game—own it with gear that brings out the champion in you. Your next goal starts here!
         </p>
         <button>View Items</button>
       </div>
