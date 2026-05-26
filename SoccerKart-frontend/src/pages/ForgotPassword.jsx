@@ -6,7 +6,7 @@ import { useNavigate } from "react-router-dom";
 import axios from "axios";
 import "toastr/build/toastr.min.css";
 import toastr from "toastr";
-import {APIUrl}  from '../../../utils';
+import {APIUrl}  from '../../utils';
 
 toastr.options = {
   closeButton: true,
