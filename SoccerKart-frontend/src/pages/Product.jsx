@@ -6,6 +6,7 @@ import { useParams, useNavigate } from "react-router-dom";
 import "./productdetails.css";
 import { useCart } from "../context/cart";
 import toastr from "toastr";
+import {APIUrl}  from '../../utils';  
 
 export default function Product() {
   const params = useParams();
@@ -24,7 +25,7 @@ export default function Product() {
   const getProduct = async () => {
     try {
       const { data } = await axios.get(
-        `http://localhost:5000/api/v1/product/get-product/${params.slug}`
+        `${APIUrl}/api/v1/product/get-product/${params.slug}`
       );
       setProduct(data?.product);
     } catch (error) {
@@ -41,7 +42,7 @@ export default function Product() {
           <div className="product-img">
             {/* {JSON.stringify(product, null, 4)}    -  */}
             <img
-              src={`http://localhost:5000/api/v1/product/product-photo/${product?._id}`}
+              src={`${APIUrl}/api/v1/product/product-photo/${product?._id}`}
               className="card-img-top"
               alt={product.name}
               height="300"

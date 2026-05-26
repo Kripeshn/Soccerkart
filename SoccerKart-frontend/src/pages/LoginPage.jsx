@@ -1,5 +1,6 @@
 import React from 'react'
 import Nav from '../Components/Layout/Nav'
+import {APIUrl} from '../../utils';
 
 import "./Login.css"
 import { useState } from 'react'
@@ -29,7 +30,7 @@ export default function LoginPage() {
 
   const handleSubmit = async  (e) => {
     e.preventDefault();
-    axios.post('http://localhost:5000/login', {email, password})
+    axios.post(`${APIUrl}/login`, {email, password})
      .then(result => {
       if(result.status === 200 && result.data.token){       
         localStorage.setItem('authToken', result.data.token);

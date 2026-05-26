@@ -5,6 +5,9 @@ import Nav from "../../Components/Layout/Nav";
 import axios from "axios";
 import toastr from "toastr";
 import { Link } from "react-router-dom";
+import {APIUrl}  from '../../../utils';
+
+
 const Products = () => {
   const [products, setProducts] = useState([]);
 
@@ -12,7 +15,7 @@ const Products = () => {
   const getAllProducts = async () => {
     try {
       const { data } = await axios.get(
-        "http://localhost:5000/api/v1/product/get-product",
+        `${APIUrl}/api/v1/product/get-product`,
         {
           headers: {
             Authorization: localStorage.getItem("authToken"), // Include the token in the Authorization header
@@ -49,7 +52,7 @@ const Products = () => {
                 >
                   <div className="card m-2" style={{ width: "18rem" }}>
                     <img
-                      src={`http://localhost:5000/api/v1/product/product-photo/${p._id}`}
+                      src={`${APIUrl}/api/v1/product/product-photo/${p._id}`}
                       className="card-img-top"
                       alt={p.name}
                     />

@@ -6,7 +6,7 @@ import './Home/index.css'
 import cartimg from  '../assets/cart.svg'
 import toastr from 'toastr';
 import { useNavigate } from 'react-router-dom';
-
+import { APIUrl } from '../../utils';
 
 const Search = () => {
     const [values, setValues] = useSearch(); 
@@ -27,7 +27,7 @@ const Search = () => {
                 <div key={p._id} onClick={() => navigate(`/product/${p.slug}`)} className="products" >
                   <div className="product-image-container">                  
                   <img
-                    src={`http://localhost:5000/api/v1/product/product-photo/${p._id}`}
+                    src={`${APIUrl}/api/v1/product/product-photo/${p._id}`}
                     className="product-image"
                     alt={p.name}
                     />

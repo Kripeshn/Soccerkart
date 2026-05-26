@@ -6,6 +6,7 @@ import { useNavigate } from "react-router-dom";
 import axios from "axios";
 import "toastr/build/toastr.min.css";
 import toastr from "toastr";
+import {APIUrl}  from '../../../utils';
 
 toastr.options = {
   closeButton: true,
@@ -15,7 +16,7 @@ toastr.options = {
 
 const ForgotPassword = () => {
   const [email, setEmail] = useState("");
-  const [newPassword, setNewPassword] = useState(""); // ✅ Renamed to match backend
+  const [newPassword, setNewPassword] = useState(""); 
   const [answer, setAnswer] = useState("");
 
   const navigate = useNavigate();
@@ -23,11 +24,11 @@ const ForgotPassword = () => {
   const handleSubmit = async (e) => {
     e.preventDefault();
     axios
-      .post("http://localhost:5000/forgot-password", {
+      .post(`${APIUrl}/forgot-password`, {
         email,
         newPassword,
         answer,
-      }) // ✅ Fixed field name
+      }) 
       .then((result) => {
         if (result.status === 200) {
           toastr.success(`Password reset successful. Please log in.`);
@@ -65,7 +66,7 @@ const ForgotPassword = () => {
               id="answer"
               name="answer"
               value={answer}
-              onChange={(e) => setAnswer(e.target.value)} // ✅ Fixed here
+              onChange={(e) => setAnswer(e.target.value)} 
               placeholder="Enter your favourite sport"
               required
             />
@@ -77,9 +78,9 @@ const ForgotPassword = () => {
               type="password"
               id="password"
               name="password"
-              value={newPassword} // ✅ Controlled input
+              value={newPassword} 
               placeholder="Enter new password"
-              onChange={(e) => setNewPassword(e.target.value)} // ✅ Corrected function name
+              onChange={(e) => setNewPassword(e.target.value)} e
               required
             />
           </div>

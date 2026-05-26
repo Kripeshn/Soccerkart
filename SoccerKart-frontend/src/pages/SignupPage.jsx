@@ -5,6 +5,7 @@ import { NavLink, useNavigate } from "react-router-dom";
 import axios from "axios";
 import toastr from "toastr";
 import logo from '../assets/logo1.png'
+import { APIUrl } from "../../utils";
 
 export default function SignupPage() {
   const [name, setName] = useState();
@@ -20,7 +21,7 @@ export default function SignupPage() {
   const handleSubmit = (e) => {
     e.preventDefault();
     axios
-      .post("http://localhost:5000/register", { name, email, password, answer })
+      .post(`${APIUrl}/register`, { name, email, password, answer })
       .then((response) => {
         if (response.status === 201) {
           console.log(response);
@@ -105,7 +106,7 @@ export default function SignupPage() {
             <input
               type="text"
               id="answer"
-              name="password"
+              name="answer"
               onChange={(e) => setAnswer(e.target.value)}
               placeholder="What is your favourite sports"
               required

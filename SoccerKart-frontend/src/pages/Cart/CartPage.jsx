@@ -3,6 +3,8 @@ import Nav from '../../Components/Layout/Nav'
 import { useCart } from '../../context/cart'
 import { useAuth } from '../../context/auth';
 import { useNavigate } from 'react-router-dom';
+import { APIUrl } from '../../../utils';
+
 import './Cart.css'
 const Cart = () => {
   const [cart, setCart] = useCart();
@@ -99,7 +101,7 @@ const Cart = () => {
                 <div key={id}>
                   <div className="cart-items-title cart-items-item">
                     <img
-                      src={`http://localhost:5000/api/v1/product/product-photo/${id}`}
+                      src={`${APIUrl}/api/v1/product/product-photo/${id}`}
                       className="card-img-top"
                       alt={p.name}
                       width="100px"
