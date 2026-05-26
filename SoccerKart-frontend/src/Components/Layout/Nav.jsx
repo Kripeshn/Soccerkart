@@ -1,6 +1,6 @@
 import React, { useState } from 'react'
 import { NavLink } from 'react-router-dom'
-import styles from './nav.module.css'
+import styles from './Nav.module.css'
 import { useAuth } from '../../context/auth'
 import toastr from 'toastr'
 import logo from '../../assets/logo1.png'
