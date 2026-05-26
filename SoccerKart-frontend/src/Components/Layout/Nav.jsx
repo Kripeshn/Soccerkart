@@ -42,10 +42,14 @@ export default function Nav() {
             </NavLink>
           </li>
           <li>        
-            <a href="#our-products" className={styles.navlink}
-              >
+          <NavLink
+              to="/products"
+              className={({ isActive }) =>
+                isActive ? styles.active : styles.navlink
+              }
+            >
               Products
-            </a>
+            </NavLink>
 
           </li>
           <li>

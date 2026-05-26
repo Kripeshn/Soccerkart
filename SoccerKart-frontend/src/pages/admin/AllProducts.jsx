@@ -8,7 +8,7 @@ import { Link } from "react-router-dom";
 import {APIUrl}  from '../../../utils';
 
 
-const Products = () => {
+const AllProducts = () => {
   const [products, setProducts] = useState([]);
 
   //getall products
@@ -71,4 +71,4 @@ const Products = () => {
   );
 };
 
-export default Products;
+export default AllProducts;

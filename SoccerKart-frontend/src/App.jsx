@@ -20,10 +20,11 @@ import CreateProduct from "./pages/admin/CreateProduct";
 import ManageUsers from "./pages/admin/ManageUsers";
 import Orders from "./pages/user/Orders";
 import Profile from "./pages/user/Profile";
-import Products from "./pages/admin/Products";
+import AllProducts from "./pages/admin/AllProducts";
 import UpdateProduct from "./pages/admin/UpdateProduct";
 import Cart from "./pages/Cart/CartPage";
 import Search from "./pages/Search";
+import Products from "./pages/Products";
 // import CartPage from "./pages/Cart/CartPage";
 // import { Footer } from "antd/es/layout/layout";
 // import Nav from "./Components/Layout/Nav";
@@ -46,7 +47,7 @@ export default function App() {
          <Route path= "admin/create-category" element={<CreateCategory />}></Route> 
          <Route path= "admin/create-product" element={<CreateProduct />}></Route> 
          <Route path= "admin/product/:slug" element={<UpdateProduct />}></Route> 
-         <Route path= "admin/products" element={<Products />}></Route> 
+         <Route path= "admin/allproducts" element={<AllProducts />}></Route> 
          <Route path= "admin/manage-user" element={<ManageUsers />}></Route> 
 
         </Route> 
@@ -55,6 +56,8 @@ export default function App() {
         <Route path='' element={<Cart />}></Route>
         </Route>
         <Route path= "search" element={<Search />}></Route> 
+        <Route path= "/products" element={<Products />}></Route> 
+        
         <Route path= "forgot-password" element={<ForgotPassword />}></Route> 
         <Route path= "admin" element={<Admin />}></Route> 
         <Route path= "product/:slug" element={<Product />}></Route> 
