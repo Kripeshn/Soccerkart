@@ -24,7 +24,6 @@ export default function Index() {
   const [page, setPage] = useState(1);
   const [loading, setLoading] = useState(false);
 
-  //getTOtal COunt
   const getTotal = async () => {
     try {
       const { data } = await axios.get(

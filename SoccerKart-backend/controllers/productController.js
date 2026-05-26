@@ -220,7 +220,7 @@ const productCountController = async (req, res) => {
 // product list base on page
 const productListController = async (req, res) => {
   try {
-    const perPage = 2;
+    const perPage = 10;
     const page = req.params.page ? req.params.page : 1;
     const products = await Product
       .find({})
