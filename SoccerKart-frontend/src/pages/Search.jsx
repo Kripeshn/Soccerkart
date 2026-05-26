@@ -27,7 +27,7 @@ const Search = () => {
                 <div key={p._id} onClick={() => navigate(`/product/${p.slug}`)} className="products" >
                   <div className="product-image-container">                  
                   <img
-                    src={`http://localhost:8080/api/v1/product/product-photo/${p._id}`}
+                    src={`http://localhost:5000/api/v1/product/product-photo/${p._id}`}
                     className="product-image"
                     alt={p.name}
                     />

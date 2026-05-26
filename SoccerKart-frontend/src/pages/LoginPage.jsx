@@ -29,7 +29,7 @@ export default function LoginPage() {
 
   const handleSubmit = async  (e) => {
     e.preventDefault();
-    axios.post('http://localhost:8080/login', {email, password})
+    axios.post('http://localhost:5000/login', {email, password})
      .then(result => {
       if(result.status === 200 && result.data.token){       
         localStorage.setItem('authToken', result.data.token);

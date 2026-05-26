@@ -20,7 +20,7 @@ export default function SignupPage() {
   const handleSubmit = (e) => {
     e.preventDefault();
     axios
-      .post("http://localhost:8080/register", { name, email, password, answer })
+      .post("http://localhost:5000/register", { name, email, password, answer })
       .then((response) => {
         if (response.status === 201) {
           console.log(response);

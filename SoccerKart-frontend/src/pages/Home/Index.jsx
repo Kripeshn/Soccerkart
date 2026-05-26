@@ -27,7 +27,7 @@ export default function Index() {
   const getTotal = async () => {
     try {
       const { data } = await axios.get(
-        "http://localhost:8080/api/v1/product/product-count"
+        "http://localhost:5000/api/v1/product/product-count"
       );
       setTotal(data?.total);
     } catch (error) {
@@ -44,7 +44,7 @@ export default function Index() {
     try {
       setLoading(true);
       const { data } = await axios.get(
-        `http://localhost:8080/api/v1/product/product-list/${page}`
+        `http://localhost:5000/api/v1/product/product-list/${page}`
       );
       setLoading(false);
       setProducts([...products, ...data?.products]);
@@ -58,7 +58,7 @@ export default function Index() {
   const getAllCategory = async () => {
     try {
       const { data } = await axios.get(
-        "http://localhost:8080/api/v1/category/get-category"
+        "http://localhost:5000/api/v1/category/get-category"
       );
       if (data?.success) {
         setCategories(data?.category);
@@ -78,7 +78,7 @@ export default function Index() {
     try {
       setLoading(true);
       const { data } = await axios.get(
-        `http://localhost:8080/api/v1/product/product-list/${page}`
+        `http://localhost:5000/api/v1/product/product-list/${page}`
       );
       setLoading(false);
       setProducts(data.products);
@@ -107,7 +107,7 @@ export default function Index() {
   const filterProduct = async () => {
     try {
       const { data } = await axios.post(
-        "http://localhost:8080/api/v1/product/product-filters",
+        "http://localhost:5000/api/v1/product/product-filters",
         {
           checked,
           radio,
@@ -168,7 +168,7 @@ export default function Index() {
               <div key={p._id} className="products" onClick={() => navigate(`/product/${p.slug}`)}>
                 <div className="product-image-container" >
                   <img
-                    src={`http://localhost:8080/api/v1/product/product-photo/${p._id}`}
+                    src={`http://localhost:5000/api/v1/product/product-photo/${p._id}`}
                     className="product-image"
                     alt={p.name}
                   />

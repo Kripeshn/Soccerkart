@@ -99,7 +99,7 @@ const Cart = () => {
                 <div key={id}>
                   <div className="cart-items-title cart-items-item">
                     <img
-                      src={`http://localhost:8080/api/v1/product/product-photo/${id}`}
+                      src={`http://localhost:5000/api/v1/product/product-photo/${id}`}
                       className="card-img-top"
                       alt={p.name}
                       width="100px"

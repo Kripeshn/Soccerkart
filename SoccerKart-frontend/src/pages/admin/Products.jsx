@@ -12,7 +12,7 @@ const Products = () => {
   const getAllProducts = async () => {
     try {
       const { data } = await axios.get(
-        "http://localhost:8080/api/v1/product/get-product",
+        "http://localhost:5000/api/v1/product/get-product",
         {
           headers: {
             Authorization: localStorage.getItem("authToken"), // Include the token in the Authorization header
@@ -49,7 +49,7 @@ const Products = () => {
                 >
                   <div className="card m-2" style={{ width: "18rem" }}>
                     <img
-                      src={`http://localhost:8080/api/v1/product/product-photo/${p._id}`}
+                      src={`http://localhost:5000/api/v1/product/product-photo/${p._id}`}
                       className="card-img-top"
                       alt={p.name}
                     />

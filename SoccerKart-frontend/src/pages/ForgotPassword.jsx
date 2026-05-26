@@ -23,7 +23,7 @@ const ForgotPassword = () => {
   const handleSubmit = async (e) => {
     e.preventDefault();
     axios
-      .post("http://localhost:8080/forgot-password", {
+      .post("http://localhost:5000/forgot-password", {
         email,
         newPassword,
         answer,

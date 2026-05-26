@@ -24,7 +24,7 @@ export default function Product() {
   const getProduct = async () => {
     try {
       const { data } = await axios.get(
-        `http://localhost:8080/api/v1/product/get-product/${params.slug}`
+        `http://localhost:5000/api/v1/product/get-product/${params.slug}`
       );
       setProduct(data?.product);
     } catch (error) {
@@ -41,7 +41,7 @@ export default function Product() {
           <div className="product-img">
             {/* {JSON.stringify(product, null, 4)}    -  */}
             <img
-              src={`http://localhost:8080/api/v1/product/product-photo/${product?._id}`}
+              src={`http://localhost:5000/api/v1/product/product-photo/${product?._id}`}
               className="card-img-top"
               alt={product.name}
               height="300"
