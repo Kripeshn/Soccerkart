@@ -3,6 +3,7 @@ import { useSearch } from '../../context/search'
 import axios from 'axios';
 import search from '../../assets/search.svg'
 import { useNavigate } from 'react-router-dom';
+import { APIUrl } from '../../../utils';
 
 
 const SearchInput = () => {
@@ -12,7 +13,7 @@ const SearchInput = () => {
         e.preventDefault();
         try {
             const { data } = await axios.get(
-                `http://localhost:8080/api/v1/product/search/${values.keyword}`
+                `${APIUrl}/api/v1/product/search/${values.keyword}`
               );
               setValues({ ...values, results: data });
               navigate("/search");
