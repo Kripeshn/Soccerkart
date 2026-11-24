@@ -1,0 +1,41 @@
+.sk-auth {
+  min-height: 100vh;
+  background:
+    radial-gradient(900px 420px at 85% -10%, rgba(255, 140, 87, 0.18), transparent 60%),
+    radial-gradient(700px 380px at -5% 105%, rgba(28, 39, 76, 0.12), transparent 60%),
+    var(--bg);
+}
+
+.sk-auth-top {
+  max-width: var(--container);
+  margin: 0 auto;
+  padding: 20px 24px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.sk-auth-brand img { height: 40px; width: auto; display: block; }
+
+.sk-auth-back {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  font-size: 14px;
+  font-weight: 500;
+  color: var(--text-2);
+  padding: 8px 14px;
+  border-radius: var(--radius-pill);
+  transition: var(--transition);
+}
+.sk-auth-back:hover { background: var(--surface); color: var(--brand-dark); }
+
+.sk-auth-main {
+  max-width: var(--container);
+  margin: 0 auto;
+  padding: 0 24px 48px;
+}
+
+@media (max-width: 600px) {
+  .sk-auth-top, .sk-auth-main { padding-left: 16px; padding-right: 16px; }
+}

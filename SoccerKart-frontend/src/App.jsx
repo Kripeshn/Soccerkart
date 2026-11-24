@@ -1,72 +1,91 @@
 import React from "react";
-import { BrowserRouter, Routes, Route } from "react-router-dom";
-import Product from "./pages/Product";
-import LoginPage from "./pages/LoginPage";
-import Index from "./pages/Home/Index";
-import PageNotFound from "./pages/PageNotFound";
+import { Routes, Route } from "react-router-dom";
 import "../index.css";
-import SignupPage from "./pages/SignupPage";
-import Home from "./pages/Home";
-import About from "./pages/About";
-import Admin from "./pages/admin/Admin";
-import Dashboard from "./pages/user/Dashboard";
-import PrivateRoute from "./Components/Routes/Private";
 import "bootstrap/dist/css/bootstrap.min.css";
 import "bootstrap/dist/js/bootstrap.bundle.min.js";
-import ForgotPassword from "./pages/ForgotPassword";
+
+// layouts
+import PublicLayout from "./layouts/PublicLayout";
+import AdminLayout from "./layouts/AdminLayout";
+import AuthLayout from "./layouts/AuthLayout";
+
+// route guards
+import PrivateRoute from "./Components/Routes/Private";
 import AdminRoute from "./Components/Routes/AdminRoute";
-import CreateCategory from "./pages/admin/CreateCategory";
-import CreateProduct from "./pages/admin/CreateProduct";
-import ManageUsers from "./pages/admin/ManageUsers";
+
+// public pages
+import Index from "./pages/Home/Index";
+import Home from "./pages/Home";
+import Products from "./pages/Products";
+import Product from "./pages/Product";
+import Search from "./pages/Search";
+import About from "./pages/About";
+import Cart from "./pages/Cart/CartPage";
+import PageNotFound from "./pages/PageNotFound";
+
+// auth pages
+import LoginPage from "./pages/LoginPage";
+import SignupPage from "./pages/SignupPage";
+import ForgotPassword from "./pages/ForgotPassword";
+
+// user area
+import Dashboard from "./pages/user/Dashboard";
 import Orders from "./pages/user/Orders";
 import Profile from "./pages/user/Profile";
-import AllProducts from "./pages/admin/AllProducts";
+
+// admin area
+import Admin from "./pages/admin/Admin";
+import CreateCategory from "./pages/admin/CreateCategory";
+import CreateProduct from "./pages/admin/CreateProduct";
 import UpdateProduct from "./pages/admin/UpdateProduct";
-import Cart from "./pages/Cart/CartPage";
-import Search from "./pages/Search";
-import Products from "./pages/Products";
-// import CartPage from "./pages/Cart/CartPage";
-// import { Footer } from "antd/es/layout/layout";
-// import Nav from "./Components/Layout/Nav";
-// import Login from "./pages/login/Login";
+import AllProducts from "./pages/admin/AllProducts";
+import ManageUsers from "./pages/admin/ManageUsers";
 
 export default function App() {
   return (
+    <div className="app-container">
+      <Routes>
+        {/* ── Storefront: Nav + page + Footer ── */}
+        <Route element={<PublicLayout />}>
+          <Route path="/" element={<Index />} />
+          <Route path="home" element={<Home />} />
+          <Route path="products" element={<Products />} />
+          <Route path="product/:slug" element={<Product />} />
+          <Route path="search" element={<Search />} />
+          <Route path="about" element={<About />} />
 
-    <div className='app-container'>
-   
-       <Routes>
-        <Route path= "/" element={<Index />}></Route> 
-        <Route path= "/dashboard" element={<PrivateRoute />}>
-         <Route path= "user" element={<Dashboard />}></Route> 
-         <Route path= "user/orders" element={<Orders />}></Route> 
-         <Route path= "user/profile" element={<Profile />}></Route> 
-        </Route> 
-        <Route path= "/dashboard" element={<AdminRoute />}>
-         <Route path= "admin" element={<Admin />}></Route> 
-         <Route path= "admin/create-category" element={<CreateCategory />}></Route> 
-         <Route path= "admin/create-product" element={<CreateProduct />}></Route> 
-         <Route path= "admin/product/:slug" element={<UpdateProduct />}></Route> 
-         <Route path= "admin/allproducts" element={<AllProducts />}></Route> 
-         <Route path= "admin/manage-user" element={<ManageUsers />}></Route> 
+          <Route path="cart" element={<PrivateRoute />}>
+            <Route index element={<Cart />} />
+          </Route>
 
-        </Route> 
-        <Route path= "home" element={<Home />}></Route> 
-        <Route path="/cart" element={<PrivateRoute/>}>
-        <Route path='' element={<Cart />}></Route>
+          <Route path="dashboard" element={<PrivateRoute />}>
+            <Route path="user" element={<Dashboard />} />
+            <Route path="user/orders" element={<Orders />} />
+            <Route path="user/profile" element={<Profile />} />
+          </Route>
+
+          <Route path="*" element={<PageNotFound />} />
         </Route>
-        <Route path= "search" element={<Search />}></Route> 
-        <Route path= "/products" element={<Products />}></Route> 
-        
-        <Route path= "forgot-password" element={<ForgotPassword />}></Route> 
-        <Route path= "admin" element={<Admin />}></Route> 
-        <Route path= "product/:slug" element={<Product />}></Route> 
-        <Route path= "login" element={<LoginPage />}></Route> 
-        <Route path= "signup" element={<SignupPage />}></Route> 
-        <Route path= "about" element={<About />}></Route> 
-        <Route path= "*" element={<PageNotFound />}></Route> 
-       </Routes>
 
-  </div>
+        {/* ── Auth screens: minimal shell, no Nav / Footer ── */}
+        <Route element={<AuthLayout />}>
+          <Route path="login" element={<LoginPage />} />
+          <Route path="signup" element={<SignupPage />} />
+          <Route path="forgot-password" element={<ForgotPassword />} />
+        </Route>
+
+        {/* ── Admin: sidebar + top bar, no Nav / Footer ── */}
+        <Route path="dashboard" element={<AdminRoute />}>
+          <Route element={<AdminLayout />}>
+            <Route path="admin" element={<Admin />} />
+            <Route path="admin/create-category" element={<CreateCategory />} />
+            <Route path="admin/create-product" element={<CreateProduct />} />
+            <Route path="admin/product/:slug" element={<UpdateProduct />} />
+            <Route path="admin/allproducts" element={<AllProducts />} />
+            <Route path="admin/manage-user" element={<ManageUsers />} />
+          </Route>
+        </Route>
+      </Routes>
+    </div>
   );
 }

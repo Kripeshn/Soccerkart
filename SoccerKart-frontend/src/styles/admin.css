@@ -1,0 +1,101 @@
+/* ───────────────────────────────────────────────
+   Shared admin patterns (`ad-` prefix)
+   Page header, cards, tables, forms, empty states.
+   ─────────────────────────────────────────────── */
+
+.ad-page { max-width: 1100px; margin: 0 auto; }
+
+.ad-head {
+  display: flex;
+  align-items: flex-end;
+  justify-content: space-between;
+  gap: 16px;
+  flex-wrap: wrap;
+  margin-bottom: 24px;
+}
+.ad-head h2 { margin: 0; font-size: 26px; font-weight: 600; letter-spacing: -0.01em; color: var(--ink); }
+.ad-head p { margin: 4px 0 0; font-size: 15px; color: var(--text-2); }
+
+.ad-card {
+  background: var(--surface);
+  border: 1px solid var(--line);
+  border-radius: var(--radius-lg);
+  box-shadow: var(--shadow-sm);
+}
+.ad-card-pad { padding: 22px; }
+.ad-card-title { margin: 0 0 4px; font-size: 17px; font-weight: 600; color: var(--ink); }
+.ad-card-sub { margin: 0 0 18px; font-size: 14px; color: var(--text-2); }
+
+/* ── Stat cards ── */
+.ad-stats { display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap: 16px; margin-bottom: 24px; }
+.ad-stat { display: flex; align-items: center; gap: 16px; padding: 20px; }
+.ad-stat-icon {
+  width: 48px; height: 48px; flex-shrink: 0;
+  display: grid; place-items: center;
+  border-radius: var(--radius-md);
+  background: var(--brand-soft); color: var(--brand-dark);
+  font-size: 19px;
+}
+.ad-stat-icon--blue { background: var(--info-soft); color: var(--info); }
+.ad-stat-icon--green { background: var(--success-soft); color: var(--success); }
+.ad-stat strong { display: block; font-size: 28px; font-weight: 700; line-height: 1.1; color: var(--ink); }
+.ad-stat span { font-size: 14px; color: var(--text-2); }
+
+/* ── Quick actions ── */
+.ad-actions { display: grid; grid-template-columns: repeat(auto-fit, minmax(240px, 1fr)); gap: 16px; }
+.ad-action {
+  display: flex; align-items: center; gap: 14px; padding: 18px;
+  transition: var(--transition);
+}
+.ad-action:hover { transform: translateY(-3px); border-color: var(--brand); box-shadow: var(--shadow-md); }
+.ad-action-icon {
+  width: 42px; height: 42px; display: grid; place-items: center; flex-shrink: 0;
+  border-radius: 50%; background: var(--surface-2); color: var(--ink);
+  transition: var(--transition);
+}
+.ad-action:hover .ad-action-icon { background: var(--brand-gradient); color: #fff; }
+.ad-action strong { display: block; font-size: 15px; font-weight: 600; color: var(--ink); }
+.ad-action small { font-size: 13px; color: var(--text-3); }
+
+/* ── Layout helpers ── */
+.ad-split { display: grid; grid-template-columns: 340px minmax(0, 1fr); gap: 20px; align-items: start; }
+
+/* ── Form ── */
+.ad-form { display: flex; flex-direction: column; gap: 14px; }
+.ad-field { display: flex; flex-direction: column; }
+
+/* ── Toolbar ── */
+.ad-toolbar { display: flex; align-items: center; justify-content: space-between; gap: 12px; padding: 16px 22px; border-bottom: 1px solid var(--line); }
+.ad-toolbar .sk-input { max-width: 260px; padding: 9px 14px; }
+
+/* ── Table ── */
+.ad-table-wrap { overflow-x: auto; }
+.ad-table { width: 100%; border-collapse: collapse; }
+.ad-table th {
+  padding: 12px 22px; text-align: left;
+  font-size: 12px; font-weight: 600; letter-spacing: 0.08em; text-transform: uppercase;
+  color: var(--text-3); background: var(--surface-2);
+}
+.ad-table td { padding: 14px 22px; border-top: 1px solid var(--line); font-size: 15px; color: var(--text); vertical-align: middle; }
+.ad-table tbody tr { transition: background var(--transition); }
+.ad-table tbody tr:hover { background: #fafbfe; }
+.ad-table .ad-col-actions { width: 1%; white-space: nowrap; text-align: right; }
+.ad-table .ad-col-actions .sk-btn + .sk-btn { margin-left: 8px; }
+.ad-cell-main { display: flex; align-items: center; gap: 12px; font-weight: 500; }
+.ad-cell-dot { width: 34px; height: 34px; display: grid; place-items: center; border-radius: var(--radius-sm); background: var(--brand-soft); color: var(--brand-dark); font-size: 14px; font-weight: 600; }
+
+/* ── Empty / loading ── */
+.ad-empty { padding: 48px 20px; text-align: center; color: var(--text-2); }
+.ad-empty strong { display: block; margin-bottom: 4px; font-size: 16px; color: var(--ink); }
+.ad-skeleton { height: 14px; border-radius: 6px; background: linear-gradient(90deg, var(--surface-2) 25%, #e9edf5 37%, var(--surface-2) 63%); background-size: 400% 100%; animation: adShimmer 1.3s ease infinite; }
+@keyframes adShimmer { 0% { background-position: 100% 50%; } 100% { background-position: 0 50%; } }
+
+@media (max-width: 900px) {
+  .ad-split { grid-template-columns: 1fr; }
+}
+@media (max-width: 520px) {
+  .ad-head h2 { font-size: 22px; }
+  .ad-toolbar { flex-direction: column; align-items: stretch; }
+  .ad-toolbar .sk-input { max-width: none; }
+  .ad-table th, .ad-table td { padding: 12px 14px; }
+}

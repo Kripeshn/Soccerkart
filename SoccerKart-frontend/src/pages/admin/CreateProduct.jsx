@@ -1,178 +1,92 @@
-import React, { useState, useEffect } from 'react'
-import AdminMenu from '../../Components/Layout/AdminMenu'
-import Nav from '../../Components/Layout/Nav'
-import toastr from 'toastr';
-import axios from 'axios';
-import { Select } from 'antd';
-import { useNavigate } from 'react-router-dom';
-import {APIUrl}  from '../../../utils';
+import React, { useEffect, useState } from "react";
+import axios from "axios";
+import toastr from "toastr";
+import { useNavigate } from "react-router-dom";
+import ProductForm from "../../Components/Form/ProductForm";
+import usePhotoPreview from "../../Components/Form/usePhotoPreview";
+import { APIUrl } from "../../../utils";
 
+const EMPTY = { name: "", description: "", price: "", quantity: "", category: "", shipping: "1" };
 
-const {Option} = Select
-// import getAllCategory from './CreateCategory'
 const CreateProduct = () => {
   const navigate = useNavigate();
   const [categories, setCategories] = useState([]);
-  const [name, setName] = useState("");
-  const [description, setDescription] = useState("");
-  const [price, setPrice] = useState("");
-  const [category, setCategory] = useState("");
-  const [quantity, setQuantity] = useState("");
-  const [shipping, setShipping] = useState("");
-  const [photo, setPhoto] = useState("");
+  const [form, setForm] = useState(EMPTY);
+  const [photo, setPhoto] = useState(null);
+  const [submitting, setSubmitting] = useState(false);
+  const previewSrc = usePhotoPreview(photo);
 
-   //get all category
-   const getAllCategory = async () => {
+  useEffect(() => {
+    (async () => {
+      try {
+        const { data } = await axios.get(`${APIUrl}/api/v1/category/get-category`);
+        if (data?.success) setCategories(data.category);
+      } catch (error) {
+        console.log(error);
+        toastr.error("Something went wrong in getting categories");
+      }
+    })();
+  }, []);
+
+  const handleCreate = async (e) => {
+    e.preventDefault();
+    if (!photo) {
+      toastr.error("Please upload a product photo");
+      return;
+    }
+    setSubmitting(true);
     try {
-      const { data } = await axios.get(`${APIUrl}/api/v1/category/get-category`);
+      const productData = new FormData();
+      productData.append("name", form.name);
+      productData.append("description", form.description);
+      productData.append("price", form.price);
+      productData.append("quantity", form.quantity);
+      productData.append("category", form.category);
+      productData.append("shipping", form.shipping);
+      productData.append("photo", photo);
+
+      const { data } = await axios.post(
+        `${APIUrl}/api/v1/product/create-product`,
+        productData,
+        { headers: { Authorization: localStorage.getItem("authToken") } }
+      );
+
       if (data?.success) {
-        setCategories(data?.category);
+        toastr.success("Product created successfully");
+        navigate("/dashboard/admin/allproducts");
+      } else {
+        toastr.error(data?.message || "Could not create the product");
       }
     } catch (error) {
       console.log(error);
-      toastr.error("Something wwent wrong in getting catgeory");
+      toastr.error(error.response?.data?.message || "Something went wrong");
+    } finally {
+      setSubmitting(false);
     }
   };
-useEffect(() => {
-    getAllCategory();
-  }, []);
 
- //create product function
- const handleCreate = async (e) => {
-  e.preventDefault();
-  try {
-    const productData = new FormData();
-    productData.append("name", name);
-    productData.append("description", description);
-    productData.append("price", price);
-    productData.append("quantity", quantity);
-    productData.append("photo", photo);
-    productData.append("category", category);
-    const { data } = axios.post(
-      `${APIUrl}/api/v1/product/create-product`,
-      productData, {
-        headers: {
-            "Authorization": localStorage.getItem('authToken'), // Include the token in the Authorization header
-        },
-    }
-    );
-    if (data?.success) {
-      toastr.error(data?.message);
-    } else {
-      toastr.success("Product Created Successfully");
-      navigate("/dashboard/admin/products");
-    }
-  } catch (error) {
-    console.log(error);
-    toastr.error("something went wrong");
-  }
-};
   return (
-    <>
-        <Nav />
-     <div className="container-fluid m-3 p-3">
-        <div className="row">
-          <div className="col-md-3">
-            <AdminMenu />
-          </div>
-          <div className="col-md-9">          
-              <h1>Create Product</h1>  
-              <div className="m-1">
-              <Select
-                variant={false}
-                placeholder="Select a category"
-                size="large"
-                showSearch
-                className="form-select mb-3"
-                onChange={(value) => {
-                  setCategory(value);
-                }}
-              > 
-                {categories?.map( (c) => (
-                  <Option key = {c._id} value = {c.id}>{c.name}</Option>
-                ))}
-                </Select>
-                <div className="mb-3">
-                  <label className='btn btn-outline-secondary col-md-12'>
-                    {photo ? photo.name : "Upload Photo"}
-                  <input type="file" name="photo" accept='image/*' onChange={(e) => setPhoto(e.target.files[0]) } hidden />
-                  </label>
-                </div>
-                <div className="mb-3">
-                  {photo && (
-                    <div className="text-center">
-                      <img 
-                        src={`${APIUrl}/api/v1/product/product-photo/${photo.name}`} 
-                        alt="product_photo" 
-                        height={"200px"}
-                        className='img img-responsive'
-                      />
-                    </div>
-                  )}
-                </div>
-                <div className="mb-3">
-                <input
-                  type="text"
-                  value={name}
-                  placeholder="write a name"
-                  className="form-control"
-                  onChange={(e) => setName(e.target.value)}
-                />
-              </div>
-              <div className="mb-3">
-                <textarea
-                  type="text"
-                  value={description}
-                  placeholder="write a description"
-                  className="form-control"
-                  onChange={(e) => setDescription(e.target.value)}
-                />
-              </div>
-
-              <div className="mb-3">
-                <input
-                  type="number"
-                  value={price}
-                  placeholder="write a Price"
-                  className="form-control"
-                  onChange={(e) => setPrice(e.target.value)}
-                />
-              </div>
-              <div className="mb-3">
-                <input
-                  type="number"
-                  value={quantity}
-                  placeholder="write a quantity"
-                  className="form-control"
-                  onChange={(e) => setQuantity(e.target.value)}
-                />
-              </div>
-              <div className="mb-3">
-                <Select
-                  variant={false}
-                  placeholder="Select Shipping "
-                  size="large"
-                  showSearch
-                  className="form-select mb-3"
-                  onChange={(value) => {
-                    setShipping(value);
-                  }}
-                >
-                  <Option value="0">No</Option>
-                  <Option value="1">Yes</Option>
-                </Select>
-              </div>
-              <div className="mb-3">
-                <button className="btn btn-primary" onClick={handleCreate}>
-                  CREATE PRODUCT
-                </button>
-              </div>
-              </div>                
-          </div>
+    <div className="ad-page">
+      <div className="ad-head">
+        <div>
+          <h2>Add product</h2>
+          <p>Fill in the details and upload a clear photo.</p>
         </div>
       </div>
-   </>
-  )
-}
 
-export default CreateProduct
+      <ProductForm
+        form={form}
+        setForm={setForm}
+        categories={categories}
+        previewSrc={previewSrc}
+        photoName={photo?.name}
+        onPhoto={(e) => setPhoto(e.target.files[0] || null)}
+        onSubmit={handleCreate}
+        submitting={submitting}
+        submitLabel="Create product"
+      />
+    </div>
+  );
+};
+
+export default CreateProduct;

@@ -1,0 +1,45 @@
+.ab { padding-top: 40px; }
+
+.ab-hero {
+  position: relative;
+  padding: clamp(32px, 6vw, 72px) clamp(24px, 5vw, 64px);
+  border-radius: var(--radius-xl);
+  background:
+    radial-gradient(600px 300px at 100% 0%, rgba(255, 140, 87, 0.28), transparent 60%),
+    linear-gradient(135deg, var(--ink) 0%, var(--ink-deep) 100%);
+  color: #fff;
+  overflow: hidden;
+}
+.ab-eyebrow {
+  display: inline-block;
+  margin-bottom: 16px;
+  padding: 6px 14px;
+  border-radius: var(--radius-pill);
+  background: rgba(255, 255, 255, 0.12);
+  border: 1px solid rgba(255, 255, 255, 0.18);
+  font-size: 13px;
+  font-weight: 500;
+}
+.ab-hero h1 { margin: 0 0 16px; max-width: 640px; font-size: clamp(32px, 5vw, 54px); font-weight: 700; line-height: 1.08; letter-spacing: -0.03em; }
+.ab-hero h1 span { background: var(--brand-gradient); -webkit-background-clip: text; background-clip: text; -webkit-text-fill-color: transparent; }
+.ab-hero p { margin: 0 0 28px; max-width: 580px; font-size: clamp(15px, 1.6vw, 18px); line-height: 1.75; color: rgba(255, 255, 255, 0.8); }
+.ab-actions { display: flex; flex-wrap: wrap; gap: 12px; }
+.ab-actions .sk-btn--ghost { background: rgba(255, 255, 255, 0.1); border-color: rgba(255, 255, 255, 0.28); color: #fff; }
+.ab-actions .sk-btn--ghost:hover { background: rgba(255, 255, 255, 0.2); color: #fff; }
+
+.ab-features { margin-top: 56px; }
+.ab-features h2 { margin: 0 0 22px; font-size: clamp(24px, 3vw, 32px); font-weight: 600; letter-spacing: -0.02em; color: var(--ink); }
+.ab-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(240px, 1fr)); gap: 20px; }
+
+.ab-card { padding: 28px; transition: var(--transition); }
+.ab-card:hover { transform: translateY(-4px); box-shadow: var(--shadow-md); border-color: var(--brand); }
+.ab-icon { width: 52px; height: 52px; margin-bottom: 18px; display: grid; place-items: center; border-radius: var(--radius-md); background: var(--brand-soft); color: var(--brand-dark); font-size: 21px; transition: var(--transition); }
+.ab-card:hover .ab-icon { background: var(--brand-gradient); color: #fff; }
+.ab-card h3 { margin: 0 0 8px; font-size: 19px; font-weight: 600; color: var(--ink); }
+.ab-card p { margin: 0; font-size: 15px; line-height: 1.7; color: var(--text-2); }
+
+@media (max-width: 520px) {
+  .ab { padding-top: 24px; }
+  .ab-hero { border-radius: var(--radius-lg); }
+  .ab-actions .sk-btn { flex: 1 1 100%; }
+}

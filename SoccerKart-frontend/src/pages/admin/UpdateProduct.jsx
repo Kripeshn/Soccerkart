@@ -1,248 +1,164 @@
-import React, { useState, useEffect } from "react";
-import AdminMenu from "./../../Components/Layout/AdminMenu";
-import toastr from "toastr";
+import React, { useEffect, useState } from "react";
 import axios from "axios";
-import { Select } from "antd";
+import toastr from "toastr";
 import { useNavigate, useParams } from "react-router-dom";
-const { Option } = Select;
-import Nav from "../../Components/Layout/Nav";
-import {APIUrl}  from '../../../utils';
+import { FaTrash } from "react-icons/fa";
+import ProductForm from "../../Components/Form/ProductForm";
+import usePhotoPreview from "../../Components/Form/usePhotoPreview";
+import Modal from "../../Components/UI/Modal";
+import { APIUrl } from "../../../utils";
 
+const EMPTY = { name: "", description: "", price: "", quantity: "", category: "", shipping: "1" };
+const authHeaders = () => ({ Authorization: localStorage.getItem("authToken") });
 
 const UpdateProduct = () => {
   const navigate = useNavigate();
   const params = useParams();
+
   const [categories, setCategories] = useState([]);
-  const [name, setName] = useState("");
-  const [description, setDescription] = useState("");
-  const [price, setPrice] = useState("");
-  const [category, setCategory] = useState("");
-  const [quantity, setQuantity] = useState("");
-  const [shipping, setShipping] = useState("");
-  const [photo, setPhoto] = useState("");
+  const [form, setForm] = useState(EMPTY);
+  const [photo, setPhoto] = useState(null);
   const [id, setId] = useState("");
+  const [loading, setLoading] = useState(true);
+  const [submitting, setSubmitting] = useState(false);
+  const [confirmDelete, setConfirmDelete] = useState(false);
+  const [deleting, setDeleting] = useState(false);
 
-  //get single product
-  const getSingleProduct = async () => {
-    try {
-      const { data } = await axios.get(
-        `${APIUrl}/api/v1/product/get-product/${params.slug}`
-      );
-      setName(data.product.name);
-      setId(data.product._id);
-      setDescription(data.product.description);
-      setPrice(data.product.price);
-      setPrice(data.product.price);
-      setQuantity(data.product.quantity);
-      setShipping(data.product.shipping);
-      setCategory(data.product.category._id);
-    } catch (error) {
-      console.log(error);
-    }
-  };
+  const newPreview = usePhotoPreview(photo);
+  const previewSrc = newPreview || (id ? `${APIUrl}/api/v1/product/product-photo/${id}` : "");
+
   useEffect(() => {
-    getSingleProduct();
-  }, []);
-  //get all category
-  const getAllCategory = async () => {
-    try {
-      const { data } = await axios.get(
-        `${APIUrl}/api/v1/category/get-category`
-      );
-      if (data?.success) {
-        setCategories(data?.category);
+    (async () => {
+      try {
+        const { data } = await axios.get(`${APIUrl}/api/v1/product/get-product/${params.slug}`);
+        const p = data.product;
+        setId(p._id);
+        setForm({
+          name: p.name || "",
+          description: p.description || "",
+          price: p.price ?? "",
+          quantity: p.quantity ?? "",
+          category: p.category?._id || p.category || "",
+          shipping: p.shipping ? "1" : "0",
+        });
+      } catch (error) {
+        console.log(error);
+        toastr.error("Could not load this product");
+        navigate("/dashboard/admin/allproducts");
+      } finally {
+        setLoading(false);
       }
-    } catch (error) {
-      console.log(error);
-      toastr.error("Something went wrong in getting catgeory");
-    }
-  };
+    })();
+  }, [params.slug, navigate]);
 
   useEffect(() => {
-    getAllCategory();
+    (async () => {
+      try {
+        const { data } = await axios.get(`${APIUrl}/api/v1/category/get-category`);
+        if (data?.success) setCategories(data.category);
+      } catch (error) {
+        console.log(error);
+        toastr.error("Something went wrong in getting categories");
+      }
+    })();
   }, []);
 
-  //create product function
   const handleUpdate = async (e) => {
     e.preventDefault();
+    setSubmitting(true);
     try {
       const productData = new FormData();
-      productData.append("name", name);
-      productData.append("description", description);
-      productData.append("price", price);
-      productData.append("quantity", quantity);
-      photo && productData.append("photo", photo);
-      productData.append("category", category);
-      const { data } = axios.put(
+      productData.append("name", form.name);
+      productData.append("description", form.description);
+      productData.append("price", form.price);
+      productData.append("quantity", form.quantity);
+      productData.append("category", form.category);
+      productData.append("shipping", form.shipping);
+      if (photo) productData.append("photo", photo);
+
+      const { data } = await axios.put(
         `${APIUrl}/api/v1/product/update-product/${id}`,
         productData,
-        {
-          headers: {
-            Authorization: localStorage.getItem("authToken"), // Include the token in the Authorization header
-          },
-        }
+        { headers: authHeaders() }
       );
+
       if (data?.success) {
-        toastr.error(data?.message);
+        toastr.success("Product updated successfully");
+        navigate("/dashboard/admin/allproducts");
       } else {
-        toastr.success("Product Updated Successfully");
-        navigate("/dashboard/admin/products");
+        toastr.error(data?.message || "Could not update the product");
       }
     } catch (error) {
       console.log(error);
-      toastr.error("something went wrong");
+      toastr.error(error.response?.data?.message || "Something went wrong");
+    } finally {
+      setSubmitting(false);
     }
   };
 
-  //delete a product
   const handleDelete = async () => {
+    setDeleting(true);
     try {
-      //   let answer = window.prompt("Are You Sure want to delete this product ? ");
-      //   if (!answer) return;
-      const { data } = await axios.delete(
-        `${APIUrl}/api/v1/product/delete-product/${id}`,
-        {
-          headers: {
-            Authorization: localStorage.getItem("authToken"), // Include the token in the Authorization header
-          },
-        }
-      );
-      toastr.success("Product Deleted Successfully");
-      navigate("/dashboard/admin/products");
+      await axios.delete(`${APIUrl}/api/v1/product/delete-product/${id}`, { headers: authHeaders() });
+      toastr.success("Product deleted successfully");
+      navigate("/dashboard/admin/allproducts");
     } catch (error) {
       console.log(error);
       toastr.error("Something went wrong");
+      setDeleting(false);
     }
   };
-  return (
-    <>
-      {/* <Nav /> */}
-      <div className="container-fluid m-3 p-3">
-        <div className="row">
-          <div className="col-md-3">
-            <AdminMenu />
-          </div>
-          <div className="col-md-9">
-            <h1>Update Product</h1>
-            <div className="m-1 w-75">
-              <Select
-                variant={false}
-                placeholder="Select a category"
-                size="large"
-                showSearch
-                className="form-select mb-3"
-                onChange={(value) => {
-                  setCategory(value);
-                }}
-                value={category}
-              >
-                {categories?.map((c) => (
-                  <Option key={c._id} value={c._id}>
-                    {c.name}
-                  </Option>
-                ))}
-              </Select>
-              <div className="mb-3">
-                <label className="btn btn-outline-secondary col-md-12">
-                  {photo ? photo.name : "Upload Photo"}
-                  <input
-                    type="file"
-                    name="photo"
-                    accept="image/*"
-                    onChange={(e) => setPhoto(e.target.files[0])}
-                    hidden
-                  />
-                </label>
-              </div>
-              <div className="mb-3">
-                {photo ? (
-                  <div className="text-center">
-                    <img
-                      src={URL.createObjectURL(photo)}
-                      alt="product_photo"
-                      height={"200px"}
-                      className="img img-responsive"
-                    />
-                  </div>
-                ) : (
-                  <div className="text-center">
-                    <img
-                      src={`${APIUrl}/api/v1/product/product-photo/${id}`}
-                      alt="product_photo"
-                      height={"200px"}
-                      className="img img-responsive"
-                    />
-                  </div>
-                )}
-              </div>
-              <div className="mb-3">
-                <input
-                  type="text"
-                  value={name}
-                  placeholder="write a name"
-                  className="form-control"
-                  onChange={(e) => setName(e.target.value)}
-                />
-              </div>
-              <div className="mb-3">
-                <textarea
-                  type="text"
-                  value={description}
-                  placeholder="write a description"
-                  className="form-control"
-                  onChange={(e) => setDescription(e.target.value)}
-                />
-              </div>
 
-              <div className="mb-3">
-                <input
-                  type="number"
-                  value={price}
-                  placeholder="write a Price"
-                  className="form-control"
-                  onChange={(e) => setPrice(e.target.value)}
-                />
-              </div>
-              <div className="mb-3">
-                <input
-                  type="number"
-                  value={quantity}
-                  placeholder="write a quantity"
-                  className="form-control"
-                  onChange={(e) => setQuantity(e.target.value)}
-                />
-              </div>
-              <div className="mb-3">
-                <Select
-                  variant={false}
-                  placeholder="Select Shipping "
-                  size="large"
-                  showSearch
-                  className="form-select mb-3"
-                  onChange={(value) => {
-                    setShipping(value);
-                  }}
-                  value={shipping ? "yes" : "No"}
-                >
-                  <Option value="0">No</Option>
-                  <Option value="1">Yes</Option>
-                </Select>
-              </div>
-              <div className="mb-3">
-                <button className="btn btn-primary" onClick={handleUpdate}>
-                  UPDATE PRODUCT
-                </button>
-              </div>
-              <div className="mb-3">
-                <button className="btn btn-danger" onClick={handleDelete}>
-                  DELETE PRODUCT
-                </button>
-              </div>
-            </div>
-          </div>
+  if (loading) {
+    return (
+      <div className="ad-page">
+        <div className="ad-card ad-card-pad" style={{ display: "grid", gap: 16 }}>
+          {[80, 60, 90, 50].map((w, i) => (
+            <div key={i} className="ad-skeleton" style={{ width: `${w}%`, height: 18 }} />
+          ))}
         </div>
       </div>
-    </>
+    );
+  }
+
+  return (
+    <div className="ad-page">
+      <div className="ad-head">
+        <div>
+          <h2>Edit product</h2>
+          <p>{form.name}</p>
+        </div>
+      </div>
+
+      <ProductForm
+        form={form}
+        setForm={setForm}
+        categories={categories}
+        previewSrc={previewSrc}
+        photoName={photo?.name}
+        onPhoto={(e) => setPhoto(e.target.files[0] || null)}
+        onSubmit={handleUpdate}
+        submitting={submitting}
+        submitLabel="Save changes"
+        extraActions={
+          <button type="button" className="sk-btn sk-btn--danger" onClick={() => setConfirmDelete(true)}>
+            <FaTrash aria-hidden="true" /> Delete product
+          </button>
+        }
+      />
+
+      <Modal open={confirmDelete} onClose={() => setConfirmDelete(false)} title="Delete product?">
+        <p style={{ margin: 0, color: "var(--text-2)", lineHeight: 1.6 }}>
+          <strong style={{ color: "var(--ink)" }}>{form.name}</strong> will be removed from the store. This cannot be undone.
+        </p>
+        <div className="sk-modal-actions">
+          <button className="sk-btn sk-btn--ghost" onClick={() => setConfirmDelete(false)}>Cancel</button>
+          <button className="sk-btn sk-btn--danger" onClick={handleDelete} disabled={deleting}>
+            {deleting ? "Deleting..." : "Delete"}
+          </button>
+        </div>
+      </Modal>
+    </div>
   );
 };
 

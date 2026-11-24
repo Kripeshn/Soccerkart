@@ -1,0 +1,65 @@
+/* ───────────────────────────────────────────────
+   Soccerkart design tokens
+   Shared by the public store, auth screens and admin.
+   ─────────────────────────────────────────────── */
+:root {
+  /* Brand */
+  --brand: #ff5757;
+  --brand-2: #ff8c57;
+  --brand-dark: #e63e3e;
+  --brand-soft: #fff1ee;
+  --brand-glow: rgba(255, 87, 87, 0.28);
+  --brand-gradient: linear-gradient(135deg, #ff5757 0%, #ff8c57 100%);
+
+  /* Ink (navy) */
+  --ink: #1c274c;
+  --ink-soft: #2c3a6b;
+  --ink-deep: #121a36;
+
+  /* Text */
+  --text: #1c274c;
+  --text-2: #51607f;
+  --text-3: #8a94ab;
+
+  /* Surfaces */
+  --bg: #f6f8fc;
+  --surface: #ffffff;
+  --surface-2: #f1f4f9;
+  --line: #e4e9f2;
+  --line-strong: #d3dae8;
+
+  /* Status */
+  --success: #16a34a;
+  --success-soft: #e8f7ee;
+  --warning: #d97706;
+  --warning-soft: #fff4e0;
+  --danger: #dc2626;
+  --danger-soft: #fdecec;
+  --info: #2563eb;
+  --info-soft: #e8f0fe;
+
+  /* Type */
+  --font: 'Outfit', system-ui, -apple-system, 'Segoe UI', sans-serif;
+
+  /* Radius */
+  --radius-sm: 8px;
+  --radius-md: 12px;
+  --radius-lg: 18px;
+  --radius-xl: 26px;
+  --radius-pill: 999px;
+
+  /* Elevation */
+  --shadow-sm: 0 1px 2px rgba(28, 39, 76, 0.06), 0 1px 3px rgba(28, 39, 76, 0.05);
+  --shadow-md: 0 8px 24px rgba(28, 39, 76, 0.08);
+  --shadow-lg: 0 20px 48px rgba(28, 39, 76, 0.14);
+
+  /* Motion */
+  --ease: cubic-bezier(0.4, 0, 0.2, 1);
+  --transition: 0.22s var(--ease);
+
+  /* Layout */
+  --nav-h: 72px;
+  --topbar-h: 68px;
+  --sidebar-w: 264px;
+  --container: 1240px;
+}

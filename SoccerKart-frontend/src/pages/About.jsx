@@ -1,46 +1,57 @@
 import React from "react";
-import Nav from "../Components/Layout/Nav";
+import { Link } from "react-router-dom";
+import { FaFutbol, FaShoppingCart, FaLock } from "react-icons/fa";
+import "./About.css";
+
+const FEATURES = [
+  {
+    icon: FaFutbol,
+    title: "Quality products",
+    text: "Premium football gear including shoes, jerseys, and accessories.",
+  },
+  {
+    icon: FaShoppingCart,
+    title: "Easy shopping",
+    text: "Simple and smooth shopping experience with an intuitive interface.",
+  },
+  {
+    icon: FaLock,
+    title: "Secure orders",
+    text: "Safe checkout process with secure authentication and payments.",
+  },
+];
 
 export default function About() {
   return (
-    <div style={{ padding: "20px" }}>
-      <Nav />
-
-      <h1>About Us</h1>
-      <p>
-        SoccerKart is a modern e-commerce platform dedicated to providing high-quality football gear and accessories.
-        We aim to make sports shopping easy, fast, and secure for all football enthusiasts.
-      </p>
-
-      <h2 style={{ marginTop: "30px" }}>What We Provide</h2>
-
-      <div style={{ display: "flex", gap: "20px", marginTop: "15px" }}>
-        
-        <div style={boxStyle}>
-          <h3>⚽ Quality Products</h3>
-          <p>Premium football gear including shoes, jerseys, and accessories.</p>
+    <div className="ab">
+      <section className="ab-hero">
+        <span className="ab-eyebrow">About us</span>
+        <h1>
+          Football gear, made <span>easy to shop.</span>
+        </h1>
+        <p>
+          SoccerKart is a modern e-commerce platform dedicated to providing
+          high-quality football gear and accessories. We aim to make sports
+          shopping easy, fast, and secure for all football enthusiasts.
+        </p>
+        <div className="ab-actions">
+          <Link to="/products" className="sk-btn sk-btn--primary">Shop the collection</Link>
+          <Link to="/" className="sk-btn sk-btn--ghost">Back to home</Link>
         </div>
+      </section>
 
-        <div style={boxStyle}>
-          <h3>🛒 Easy Shopping</h3>
-          <p>Simple and smooth shopping experience with intuitive UI.</p>
+      <section className="ab-features" aria-labelledby="ab-what">
+        <h2 id="ab-what">What we provide</h2>
+        <div className="ab-grid">
+          {FEATURES.map(({ icon: Icon, title, text }) => (
+            <article key={title} className="sk-card ab-card">
+              <span className="ab-icon"><Icon aria-hidden="true" /></span>
+              <h3>{title}</h3>
+              <p>{text}</p>
+            </article>
+          ))}
         </div>
-
-        <div style={boxStyle}>
-          <h3>🔒 Secure Orders</h3>
-          <p>Safe checkout process with secure authentication and payments.</p>
-        </div>
-
-      </div>
+      </section>
     </div>
   );
 }
-
-const boxStyle = {
-  flex: 1,
-  padding: "20px",
-  border: "1px solid #ddd",
-  borderRadius: "10px",
-  textAlign: "center",
-  boxShadow: "0 2px 8px rgba(0,0,0,0.1)"
-};

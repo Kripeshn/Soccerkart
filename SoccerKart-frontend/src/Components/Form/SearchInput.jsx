@@ -1,41 +1,47 @@
-import React from 'react'
-import { useSearch } from '../../context/search'
-import axios from 'axios';
-import search from '../../assets/search.svg'
-import { useNavigate } from 'react-router-dom';
-import { APIUrl } from '../../../utils';
-
+import React from "react";
+import axios from "axios";
+import { useNavigate } from "react-router-dom";
+import toastr from "toastr";
+import { FaSearch } from "react-icons/fa";
+import { useSearch } from "../../context/search";
+import { APIUrl } from "../../../utils";
+import styles from "./SearchInput.module.css";
 
 const SearchInput = () => {
-    const [values, setValues] = useSearch();
-    const navigate = useNavigate();
-    const handleSubmit  = async(e) => {
-        e.preventDefault();
-        try {
-            const { data } = await axios.get(
-                `${APIUrl}/api/v1/product/search/${values.keyword}`
-              );
-              setValues({ ...values, results: data });
-              navigate("/search");
-        } catch (error) {
-            console.log(error);
+  const [values, setValues] = useSearch();
+  const navigate = useNavigate();
 
-        }
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+    const keyword = values.keyword.trim();
+    if (!keyword) return;
+    try {
+      const { data } = await axios.get(
+        `${APIUrl}/api/v1/product/search/${encodeURIComponent(keyword)}`
+      );
+      setValues({ ...values, results: data });
+      navigate("/search");
+    } catch (error) {
+      console.log(error);
+      toastr.error("Search failed. Please try again.");
     }
-  return (
-    <div>
-      <form className='d-flex' onSubmit={handleSubmit}>
-        <input 
-            type="search" 
-            className='form-control me-2'
-            placeholder='Search your products..'
-            value={values.keyword}
-            onChange={(e) => setValues({...values, keyword: e.target.value })}
-        />
-         <img  src={search} alt="" onClick={handleSubmit} />
-      </form>
-    </div>
-  )
-}
+  };
 
-export default SearchInput
+  return (
+    <form className={styles.form} onSubmit={handleSubmit} role="search">
+      <input
+        type="search"
+        className={styles.input}
+        placeholder="Search products"
+        aria-label="Search products"
+        value={values.keyword}
+        onChange={(e) => setValues({ ...values, keyword: e.target.value })}
+      />
+      <button type="submit" className={styles.btn} aria-label="Search">
+        <FaSearch aria-hidden="true" />
+      </button>
+    </form>
+  );
+};
+
+export default SearchInput;
