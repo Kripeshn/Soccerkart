@@ -16,7 +16,6 @@ import AdminRoute from "./Components/Routes/AdminRoute";
 // public pages
 import Index from "./pages/Home/Index";
 import Home from "./pages/Home";
-import Products from "./pages/Products";
 import Product from "./pages/Product";
 import Search from "./pages/Search";
 import About from "./pages/About";

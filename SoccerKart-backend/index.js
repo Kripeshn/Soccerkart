@@ -11,6 +11,7 @@ const {requireSignIn, isAdmin} = require("./middleware/authMiddleware.js");
 const categoryRoutes = require('./routes/categoryRoutes.js')
 const productRoutes = require('./routes/productRoutes.js')
 const userRoutes = require("./routes/userRoutes.js");
+const orderRoutes = require("./routes/orderRoutes");
 
 
 //configure env
@@ -25,6 +26,8 @@ app.use('/api/v1/auth', authRoutes);
 app.use('/api/v1/category', categoryRoutes);
 app.use('/api/v1/product', productRoutes);
 app.use('/api/v1/user', userRoutes);
+app.use('/api/v1/order', orderRoutes);
+
 
 const PORT = process.env.PORT || 8080;
 const MONGO_URL = process.env.MONGO_URL;
