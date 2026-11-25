@@ -1,60 +1,41 @@
-import React, { useState } from 'react'
-import Nav from '../Components/Layout/Nav'
+import React from "react";
+import { Link } from "react-router-dom";
 import { useSearch } from "../context/search";
-import { useCart } from '../context/cart';
-import './Home/index.css'
-import cartimg from  '../assets/cart.svg'
-import toastr from 'toastr';
-import { useNavigate } from 'react-router-dom';
-import { APIUrl } from '../../utils';
+import ProductCard from "../Components/Product/ProductCard";
+import "./Search.css";
 
 const Search = () => {
-    const [values, setValues] = useSearch(); 
-    const [cart, setCart] = useCart();
-    const navigate = useNavigate();
+  const [values] = useSearch();
+  const results = values?.results || [];
+  const keyword = values?.keyword?.trim();
+
   return (
-    <div>
-      <Nav />
-      <div className="text-center pt-4">
-          <h1>Search Results</h1>
-          <h6>
-            {values?.results.length < 1
-              ? "No Products Found"
-              : `Found ${values?.results.length}`}
-          </h6>
-          <div className="display-list">
-            {values?.results.map((p) => (              
-                <div key={p._id} onClick={() => navigate(`/product/${p.slug}`)} className="products" >
-                  <div className="product-image-container">                  
-                  <img
-                    src={`${APIUrl}/api/v1/product/product-photo/${p._id}`}
-                    className="product-image"
-                    alt={p.name}
-                    />
-                    <div className="add" onClick={() => {
-                    setCart([...cart, p]);
-                    toastr.success("Item added to cart")
-                    }}>
-                    <img src={cartimg} alt="" />
-                    </div>
+    <section className="sr">
+      <div className="sr-head">
+        <h1>Search results</h1>
+        <p>
+          {results.length < 1
+            ? "No products found"
+            : `Found ${results.length} product${results.length === 1 ? "" : "s"}`}
+          {keyword ? <> for <strong>&ldquo;{keyword}&rdquo;</strong></> : null}
+        </p>
+      </div>
 
-                    </div>
-                  <div className="product-info">
-                    <div className="product-name">
-                      <h5>
-                        {p.name}
-                      </h5>
-                      {/* <button className="more-info">More Details</button> */}
-                      </div>
-                    <h5 className="product-description">{p.description.substring(0,20)}...</h5>
-                    <p className="product-price">Rs. {p.price}</p>                
-                  </div>
-                </div>             
-            ))}
-            </div>
+      {results.length < 1 ? (
+        <div className="sk-card sr-empty">
+          <strong>Nothing matched your search</strong>
+          <p>Check the spelling or try a broader word like &ldquo;boots&rdquo; or &ldquo;jersey&rdquo;.</p>
+          <Link to="/products" className="sk-btn sk-btn--primary">Browse all products</Link>
         </div>
-    </div>
-  )
-}
+      ) : (
+        <div className="sr-grid">
+          {results.map((p) => (
+            <ProductCard key={p._id} product={p} />
+          ))}
+        </div>
+      )}
+    </section>
+  );
+};
 
-export default Search
+export default Search;

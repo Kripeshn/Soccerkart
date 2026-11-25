@@ -1,114 +1,91 @@
-import React from 'react'
-import Nav from '../Components/Layout/Nav'
-import {APIUrl} from '../../utils';
-
-import "./Login.css"
-import { useState } from 'react'
-import { NavLink, useNavigate, useLocation } from 'react-router-dom'
-import axios from 'axios'
-import 'toastr/build/toastr.min.css';
-import toastr from 'toastr';
-import logo from '../assets/logo1.png'
-import { useAuth } from '../context/auth'
-toastr.options = {
-  "closeButton": true,
-  "progressBar": true,
-  "positionClass": "toast-top-right",
-  
-};
-
-
+import React, { useState } from "react";
+import { NavLink, useNavigate, useLocation } from "react-router-dom";
+import axios from "axios";
+import toastr from "toastr";
+import AuthCard, { PasswordInput } from "../Components/Form/AuthCard";
+import { useAuth } from "../context/auth";
+import { APIUrl } from "../../utils";
 
 export default function LoginPage() {
-  const [email, setEmail ] = useState();
-  const [password, setPassword ] = useState();
+  const [email, setEmail] = useState("");
+  const [password, setPassword] = useState("");
+  const [loading, setLoading] = useState(false);
   const [auth, setAuth] = useAuth();
-
   const navigate = useNavigate();
   const location = useLocation();
-  
 
-  const handleSubmit = async  (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
-    axios.post(`${APIUrl}/login`, {email, password})
-     .then(result => {
-      if(result.status === 200 && result.data.token){       
-        localStorage.setItem('authToken', result.data.token);
-          if(result.data.user.role === 0)
-          {
-            toastr.success(`Login successful, welcome ${result.data.user.name}.`);
-            setAuth({
-              ...auth,
-              user: result.data.user,
-              token: result.data.token,
-            });
-            localStorage.setItem('auth', JSON.stringify(result.data));
-            navigate(location.state || "/");
+    setLoading(true);
+    try {
+      const result = await axios.post(`${APIUrl}/login`, { email, password });
 
-          }else if(result.data.user.role === 1){
-            
-            toastr.success(`Login successful, welcome ${result.data.user.name}.`);
-            setAuth({
-              ...auth,
-              user: result.data.user,
-              token: result.data.token,
-            });
-            localStorage.setItem('auth', JSON.stringify(result.data));
-            navigate(location.state || "/");
-          }
-        
-      }else if(result.data === "The password is incorrect"){
-        toastr.error('Your password is incorrect. Please try again.');
-      }else{
-        toastr.error('Login failed. Please try again.');
+      if (result.status === 200 && result.data.token) {
+        localStorage.setItem("authToken", result.data.token);
+        localStorage.setItem("auth", JSON.stringify(result.data));
+        setAuth({ ...auth, user: result.data.user, token: result.data.token });
+        toastr.success(`Login successful, welcome ${result.data.user.name}.`);
+        navigate(typeof location.state === "string" ? location.state : "/");
+      } else if (result.data === "The password is incorrect") {
+        toastr.error("Your password is incorrect. Please try again.");
+      } else {
+        toastr.error("Login failed. Please try again.");
       }
-   })
-     .catch(err => console.log(err));
-}
+    } catch (err) {
+      console.log(err);
+      const body = err.response?.data;
+      toastr.error(
+        (typeof body === "string" && body) || body?.message || "Login failed. Please try again."
+      );
+    } finally {
+      setLoading(false);
+    }
+  };
 
   return (
-    <div>
-        {/* <Nav className="navbar"/> */}
-        <div className="login-container">
-        <div className="intro">
-          <div className="logo">
-            <img src={logo} alt="" />
-          </div>
-          <div className="desc">
-            Get all your football gears and accessories you want  Lorem ipsum dolor sit amet consectetur adipisicing elit. Sapiente fugiat dolorem acc 
-          </div>
+    <AuthCard
+      title="Welcome back"
+      subtitle="Log in to your account"
+      footer={
+        <>
+          Don&apos;t have an account? <NavLink to="/signup">Sign up</NavLink>
+        </>
+      }
+    >
+      <form className="au-form" onSubmit={handleSubmit}>
+        <div className="au-field">
+          <label className="sk-label" htmlFor="email">Email</label>
+          <input
+            id="email"
+            className="sk-input"
+            type="email"
+            placeholder="you@example.com"
+            autoComplete="email"
+            value={email}
+            onChange={(e) => setEmail(e.target.value)}
+            required
+          />
         </div>
 
-        <form className="login-form" onSubmit={handleSubmit}>
-                <h2> Log In </h2>
-                <div className="form-group">
-                    {/* <label htmlFor="email">Email</label> */}
-                    <input 
-                        type="email" 
-                        id="email" 
-                        name="email" 
-                        placeholder='Email'
-                        onChange={(e) => setEmail(e.target.value)} 
-                        required />
-                </div>
-                <div className="form-group">
-                    {/* <label htmlFor="password">Password</label> */}
-                    <input 
-                        type="password" 
-                        id="password" 
-                        name="password" 
-                        placeholder='Password'
-                        onChange={(e) => setPassword(e.target.value)} 
-                        required />
-                <div className='pas-sig'>
-                  <NavLink className='forgot' to="/forgot-password">Forgot your password?</NavLink>
-                  <NavLink className='sign' to= "/signup">Signup</NavLink>
-                  </div>
-                </div>
-                <button type="submit" className="login-button">Login</button>
-            </form>
-        {/* <h1>Login</h1> */}
+        <div className="au-field">
+          <label className="sk-label" htmlFor="password">Password</label>
+          <PasswordInput
+            id="password"
+            placeholder="Your password"
+            autoComplete="current-password"
+            value={password}
+            onChange={(e) => setPassword(e.target.value)}
+          />
         </div>
-    </div>
-  )
+
+        <div className="au-links">
+          <NavLink className="au-link" to="/forgot-password">Forgot your password?</NavLink>
+        </div>
+
+        <button type="submit" className="sk-btn sk-btn--primary au-submit" disabled={loading}>
+          {loading ? "Logging in..." : "Log in"}
+        </button>
+      </form>
+    </AuthCard>
+  );
 }

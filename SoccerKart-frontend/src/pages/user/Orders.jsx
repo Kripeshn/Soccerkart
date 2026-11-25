@@ -1,26 +1,27 @@
-import React from 'react'
-import UserMenu from '../../Components/Layout/UserMenu'
-import Nav from '../../Components/Layout/Nav'
-import { Footer } from 'antd/es/layout/layout'
-import Footers from '../../Components/Layout/Footer/Footer'
+import React from "react";
+import { Link } from "react-router-dom";
+import { FaBoxOpen } from "react-icons/fa";
+import UserMenu from "../../Components/Layout/UserMenu";
+import "./user.css";
 
-const Orders = () => {
-  return (
-    <div>
-        <Nav />
-      <div className="container-fluid m-3 p-3">
-        <div className="row">
-            <div className="col-md-3">
-                <UserMenu />
-            </div>
-            <div className="col-md-9">
-                <h1>All orders</h1>
-            </div>
-        </div>
+/** Empty state until the backend exposes an orders endpoint for the signed-in user. */
+const Orders = () => (
+  <div className="ud">
+    <UserMenu />
+    <div className="ud-main">
+      <div className="ud-head">
+        <h1>Your orders</h1>
+        <p>Everything you have bought from Soccerkart.</p>
       </div>
-     
-    </div>
-  )
-}
 
-export default Orders
+      <section className="sk-card ud-empty">
+        <span className="ud-empty-icon"><FaBoxOpen aria-hidden="true" /></span>
+        <h2>No orders yet</h2>
+        <p>When you place an order it will show up here.</p>
+        <Link to="/products" className="sk-btn sk-btn--primary">Start shopping</Link>
+      </section>
+    </div>
+  </div>
+);
+
+export default Orders;

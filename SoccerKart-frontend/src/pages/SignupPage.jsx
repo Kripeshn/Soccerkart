@@ -1,131 +1,113 @@
 import React, { useState } from "react";
-import Nav from "../Components/Layout/Nav";
-import "./Signup.css";
 import { NavLink, useNavigate } from "react-router-dom";
 import axios from "axios";
 import toastr from "toastr";
-import logo from '../assets/logo1.png'
+import AuthCard, { PasswordInput } from "../Components/Form/AuthCard";
 import { APIUrl } from "../../utils";
 
 export default function SignupPage() {
-  const [name, setName] = useState();
-  const [email, setEmail] = useState();
-  const [password, setPassword] = useState();
-  const [answer, setAnswer] = useState();
+  const [name, setName] = useState("");
+  const [email, setEmail] = useState("");
+  const [password, setPassword] = useState("");
+  const [answer, setAnswer] = useState("");
+  const [loading, setLoading] = useState(false);
   const navigate = useNavigate();
-  toastr.options = {
-    // "closeButton": true,
-    progressBar: true,
-    // "positionClass": "toast-top-right",
-  };
-  const handleSubmit = (e) => {
+
+  const handleSubmit = async (e) => {
     e.preventDefault();
-    axios
-      .post(`${APIUrl}/register`, { name, email, password, answer })
-      .then((response) => {
-        if (response.status === 201) {
-          console.log(response);
-          toastr.success("User Registered Successfully.");
-          setTimeout(() => navigate("/login"), 2000); // Navigate after a delay
+    setLoading(true);
+    try {
+      const response = await axios.post(`${APIUrl}/register`, { name, email, password, answer });
+      if (response.status === 201) {
+        toastr.success("User registered successfully.");
+        setTimeout(() => navigate("/login"), 1500);
+      } else {
+        toastr.error("An unexpected error occurred.");
+      }
+    } catch (error) {
+      console.error(error);
+      if (error.response) {
+        if (error.response.status === 400) {
+          toastr.error("User already exists.");
         } else {
-          toastr.error("An unexpected error occurred.");
+          toastr.error(error.response.data?.message || "Internal server error");
         }
-      })
-      .catch((error) => {
-        if (error.response) {
-          // Check for existing user (401 Unauthorized)
-          if (error.response.status === 400) {
-            toastr.error("User already exists.");
-          } else {
-            toastr.error(
-              error.response.data.message || "Internal Server Error"
-            );
-          }
-        } else {
-          // Handle other errors like network issues
-          toastr.error("Network Error or Invalid URL");
-        }
-        console.error(error);
-      });
+      } else {
+        toastr.error("Network error or invalid URL");
+      }
+    } finally {
+      setLoading(false);
+    }
   };
 
   return (
-    <div>
-      {/* <Nav /> */}
-      <div className="signup-container">
-        <div className="intro">
-                  <div className="logo">
-                    <img src={logo} alt="" />
-                  </div>
-                  <div className="desc">
-                    Get all your football gears and accessories you want  Lorem ipsum dolor sit amet consectetur adipisicing elit. Sapiente fugiat dolorem acc 
-                  </div>
-                </div>
-        <form
-          className="signup-form"
-          onSubmit={handleSubmit}
-          method="post"
-          action=""
-        >
-          <h2>Signup</h2>
-          <div className="form-group">
-            {/* <label htmlFor="username">Username</label> */}
-            <input
-              type="text"
-              id="username"
-              name="username"
-              onChange={(e) => setName(e.target.value)}
-              placeholder="Name"
-              required
-            />
-          </div>
-          <div className="form-group">
-            {/* <label htmlFor="email">Email</label> */}
-            <input
-              type="email"
-              id="email"
-              name="email"
-              onChange={(e) => setEmail(e.target.value)}
-              placeholder="email"
-              required
-            />
-          </div>
-          <div className="form-group">
-            {/* <label htmlFor="password">Password</label> */}
-            <input
-              type="password"
-              id="password"
-              name="password"
-              placeholder="password"
-              onChange={(e) => setPassword(e.target.value)}
-              required
-            />
-          </div>
-          <div className="form-group">
-            {/* <label htmlFor="password">Password</label> */}
-            <input
-              type="text"
-              id="answer"
-              name="answer"
-              onChange={(e) => setAnswer(e.target.value)}
-              placeholder="What is your favourite sports"
-              required
-            />
-          <div className="pas-sig">
+    <AuthCard
+      title="Create your account"
+      subtitle="Join Soccerkart in a minute"
+      footer={
+        <>
+          Already have an account? <NavLink to="/login">Log in</NavLink>
+        </>
+      }
+    >
+      <form className="au-form" onSubmit={handleSubmit}>
+        <div className="au-field">
+          <label className="sk-label" htmlFor="username">Full name</label>
+          <input
+            id="username"
+            className="sk-input"
+            type="text"
+            placeholder="Your name"
+            autoComplete="name"
+            value={name}
+            onChange={(e) => setName(e.target.value)}
+            required
+          />
+        </div>
 
-          <NavLink className='sign' to="../login">Already have an account?</NavLink>
-          <NavLink className='forgot' to="../login">Login</NavLink>
-          </div>
-          </div>
-          {/* <div className="form-group">
-                    <label htmlFor="confirm-password">Confirm Password</label>
-                    <input type="password" id="confirm-password" name="confirm-password" required />
-                </div> */}
-          <button type="submit" className="signup-button">
-            Signup
-          </button>
-        </form>
-      </div>
-    </div>
+        <div className="au-field">
+          <label className="sk-label" htmlFor="email">Email</label>
+          <input
+            id="email"
+            className="sk-input"
+            type="email"
+            placeholder="you@example.com"
+            autoComplete="email"
+            value={email}
+            onChange={(e) => setEmail(e.target.value)}
+            required
+          />
+        </div>
+
+        <div className="au-field">
+          <label className="sk-label" htmlFor="password">Password</label>
+          <PasswordInput
+            id="password"
+            placeholder="Choose a password"
+            autoComplete="new-password"
+            value={password}
+            onChange={(e) => setPassword(e.target.value)}
+          />
+        </div>
+
+        <div className="au-field">
+          <label className="sk-label" htmlFor="answer">What is your favourite sport?</label>
+          <input
+            id="answer"
+            className="sk-input"
+            type="text"
+            placeholder="Your answer"
+            value={answer}
+            onChange={(e) => setAnswer(e.target.value)}
+            required
+          />
+          <span className="au-hint">You will need this answer if you ever reset your password.</span>
+        </div>
+
+        <button type="submit" className="sk-btn sk-btn--primary au-submit" disabled={loading}>
+          {loading ? "Creating account..." : "Create account"}
+        </button>
+      </form>
+    </AuthCard>
   );
 }

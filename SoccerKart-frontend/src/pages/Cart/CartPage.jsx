@@ -1,203 +1,119 @@
-import React from 'react'
-import Nav from '../../Components/Layout/Nav'
-import { useCart } from '../../context/cart'
-import { useAuth } from '../../context/auth';
-import { useNavigate } from 'react-router-dom';
-import { APIUrl } from '../../../utils';
+import React, { useMemo } from "react";
+import { Link } from "react-router-dom";
+import toastr from "toastr";
+import { FaMinus, FaPlus, FaTrash, FaShoppingBag } from "react-icons/fa";
+import { useCart } from "../../context/cart";
+import { APIUrl } from "../../../utils";
+import "./Cart.css";
 
-import './Cart.css'
+const DELIVERY_FEE = 100;
+const money = (n) => `Rs. ${Number(n).toLocaleString("en-IN")}`;
+
 const Cart = () => {
   const [cart, setCart] = useCart();
-  const [auth, setAuth] = useAuth();
-  const navigate = useNavigate();
-  let df = 0;
-  const deliveryfee = () => {
-    let total = 0;
-    cart?.map((item) => {
-      total = total + item.price;
+
+  const persist = (next) => {
+    setCart(next);
+    localStorage.setItem("cart", JSON.stringify(next));
+  };
+
+  // the cart is a flat array; group duplicates into lines with a quantity
+  const lines = useMemo(() => {
+    const map = new Map();
+    cart.forEach((item) => {
+      const line = map.get(item._id);
+      if (line) line.quantity += 1;
+      else map.set(item._id, { ...item, quantity: 1 });
     });
-    if(total != 0){
-      df = 100;
-    }
-    else {
-      df=0;
-    }
-    return df.toLocaleString("en-US", {
-      style: "currency",
-      currency: "INR",
-    });
+    return [...map.values()];
+  }, [cart]);
+
+  const subtotal = cart.reduce((sum, item) => sum + item.price, 0);
+  const delivery = subtotal > 0 ? DELIVERY_FEE : 0;
+  const total = subtotal + delivery;
+
+  const increase = (line) => persist([...cart, cart.find((i) => i._id === line._id)]);
+
+  const decrease = (id) => {
+    const index = cart.findIndex((i) => i._id === id);
+    if (index === -1) return;
+    const next = [...cart];
+    next.splice(index, 1);
+    persist(next);
+  };
+
+  const removeLine = (id) => persist(cart.filter((i) => i._id !== id));
+
+  if (lines.length === 0) {
+    return (
+      <section className="ct">
+        <div className="sk-card ct-empty">
+          <span className="ct-empty-icon"><FaShoppingBag aria-hidden="true" /></span>
+          <h1>Your cart is empty</h1>
+          <p>Looks like you haven&apos;t added anything yet.</p>
+          <Link to="/products" className="sk-btn sk-btn--primary">Start shopping</Link>
+        </div>
+      </section>
+    );
   }
 
-  const totalPrice = () => {
-    try {
-      let total = 0;
-      cart?.map((item) => {
-        total = total + item.price;
-      });
-
-      return total.toLocaleString("en-US", {
-        style: "currency",
-        currency: "INR",
-      });
-   
-    } catch (error) {
-      console.log(error);
-    }
-  };
-  const GtotalPrice = () => {
-    try {
-      let total = 0;
-      let gtotal = 0;
-      cart?.map((item) => {
-        total = total + item.price;
-        gtotal = total + df;
-      });
-
-      return gtotal.toLocaleString("en-US", {
-        style: "currency",
-        currency: "INR",
-      });
-    
-    } catch (error) {
-      console.log(error);
-    }
-  };
-  //detele item
-  const removeCartItem = (pid) => {
-    try {
-      let myCart = [...cart];
-      let index = myCart.findIndex((item) => item._id === pid);
-      myCart.splice(index, 1);
-      setCart(myCart);
-      localStorage.setItem("cart", JSON.stringify(myCart));
-    } catch (error) {
-      console.log(error);
-    }
-  };
   return (
-    <div>
-      <Nav />
-  
-        <div className="cart">
-          <h1 className='text-center pb-5' >Cart page</h1>
-          <div className="cart-items">
-            <div className='cart-items-title'>
-              <p>Items</p>
-              <p>Title</p>
-              <p>Price</p>
-              <p>Quantity</p>
-              <p>Total</p>
-              <p>Remove</p>
-            </div>
-            <br />
-            <hr />
-            {Object.entries(
-              cart.reduce((acc, item) => {
-              acc[item._id] = acc[item._id] || { ...item, quantity: 0 };
-              acc[item._id].quantity += 1;
-              return acc;
-                }, {})
-              ).map(([id, p]) => (
-                <div key={id}>
-                  <div className="cart-items-title cart-items-item">
-                    <img
-                      src={`${APIUrl}/api/v1/product/product-photo/${id}`}
-                      className="card-img-top"
-                      alt={p.name}
-                      width="100px"
-                      height="100px"
-                    />
-                    <p>{p.name}</p>
-                    <p>₹ {p.price}</p>
-                    <p>{p.quantity}</p>
-                    <p>₹ {p.price * p.quantity}</p>
-                    <button className="remove" onClick={() => removeCartItem(id)}>
-                      X
-                    </button>
-                  </div>
-                  <hr />
-                </div>
-              ))}
+    <section className="ct">
+      <div className="ct-head">
+        <h1>Your cart</h1>
+        <p>{cart.length} item{cart.length === 1 ? "" : "s"}</p>
+      </div>
 
-          </div>
-<div className="cart-bottom">
-  <div className="cart-total">
-    <h2>  Cart total </h2>
-    <div>
-      <div className="cart-total-details">
-              <p>Subtotal</p>
-              <p>{totalPrice()}</p>
-      </div>
-      <hr />
-      <div className="cart-total-details">
-            <p>Delivery Fee</p>
-            <p>{deliveryfee()}</p>
-      </div>
-      <hr />
-      <div className="cart-total-details">
-            <p>Total</p>
-            <p>{GtotalPrice()}</p>
-      </div>
-      
-    </div>
-    <button>Proceed To Checkout</button>
-  </div>
-  <div className="cart-promocode">
-    <div>
-      <p>If you have a  promocode enter it here.</p>
-      <div className="cart-promocode-input">
-        <input type="text" placeholder='enter promocode' />
-        <button>Submit</button>
-      </div>
-    </div>
-  </div>
-</div>
-          {/* <div className="col-md-4 text-center">
-            <h2>Cart Summary</h2>
-            <p>Total | Checkout | Payment</p>
-            <hr />
-            <h4>Total : {totalPrice()} </h4>
-            {auth?.user?.address ? (
-              <>
-                <div className="mb-3">
-                  <h4>Current Address</h4>
-                  <h5>{auth?.user?.address}</h5>
-                  <button
-                    className="btn btn-outline-warning"
-                    onClick={() => navigate("/dashboard/user/profile")}
-                  >
-                    Update Address
+      <div className="ct-layout">
+        <ul className="ct-list">
+          {lines.map((line) => (
+            <li key={line._id} className="sk-card ct-item">
+              <Link to={`/product/${line.slug}`} className="ct-thumb">
+                <img src={`${APIUrl}/api/v1/product/product-photo/${line._id}`} alt={line.name} />
+              </Link>
+
+              <div className="ct-main">
+                <Link to={`/product/${line.slug}`} className="ct-name">{line.name}</Link>
+                <span className="ct-unit">{money(line.price)} each</span>
+
+                <div className="ct-qty" role="group" aria-label={`Quantity of ${line.name}`}>
+                  <button type="button" onClick={() => decrease(line._id)} aria-label="Decrease quantity">
+                    <FaMinus aria-hidden="true" />
+                  </button>
+                  <span>{line.quantity}</span>
+                  <button type="button" onClick={() => increase(line)} aria-label="Increase quantity">
+                    <FaPlus aria-hidden="true" />
                   </button>
                 </div>
-              </>
-            ) : (
-              <div className="mb-3">
-                {auth?.token ? (
-                  <button
-                    className="btn btn-outline-warning"
-                    onClick={() => navigate("/dashboard/user/profile")}
-                  >
-                    Update Address
-                  </button>
-                ) : (
-                  <button
-                    className="btn btn-outline-warning"
-                    onClick={() =>
-                      navigate("/login", {
-                        state: "/cart",
-                      })
-                    }
-                  >
-                    Plase Login to checkout
-                  </button>
-                )}
               </div>
-            )}
-          </div> */}
-        </div>
-      </div>
-   
-  )
-}
 
-export default Cart
+              <div className="ct-side">
+                <strong>{money(line.price * line.quantity)}</strong>
+                <button type="button" className="ct-remove" onClick={() => removeLine(line._id)} aria-label={`Remove ${line.name}`}>
+                  <FaTrash aria-hidden="true" /> Remove
+                </button>
+              </div>
+            </li>
+          ))}
+        </ul>
+
+        <aside className="sk-card ct-summary">
+          <h2>Order summary</h2>
+          <div className="ct-row"><span>Subtotal</span><span>{money(subtotal)}</span></div>
+          <div className="ct-row"><span>Delivery fee</span><span>{money(delivery)}</span></div>
+          <div className="ct-row ct-total"><span>Total</span><span>{money(total)}</span></div>
+          <button
+            type="button"
+            className="sk-btn sk-btn--primary ct-checkout"
+            onClick={() => toastr.info("Checkout is not available yet.")}
+          >
+            Proceed to checkout
+          </button>
+          <Link to="/products" className="ct-continue">Continue shopping</Link>
+        </aside>
+      </div>
+    </section>
+  );
+};
+
+export default Cart;

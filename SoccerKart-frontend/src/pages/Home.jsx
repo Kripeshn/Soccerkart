@@ -1,12 +1,7 @@
-import React from 'react'
-import Nav from '../Components/Layout/Nav'
+import React from "react";
+import { Navigate } from "react-router-dom";
 
-
+/** The old "/home" route was a stub page. It now just goes to the real home page. */
 export default function Home() {
-  return (
-    <div>
-        <Nav />
-        <h1>Home Page</h1>
-    </div>
-  )
+  return <Navigate to="/" replace />;
 }

@@ -1,43 +1,56 @@
 import { useState, useEffect } from "react";
-import { useAuth } from "../../context/auth";
-import { Outlet, useNavigate } from "react-router-dom";
+import { Outlet, useNavigate, useLocation } from "react-router-dom";
 import axios from "axios";
-import Spinner from "./Spinner";
-import {APIUrl}  from '../../../utils';
+import { useAuth } from "../../context/auth";
+import Spinner, { PageLoader } from "./Spinner";
+import { APIUrl } from "../../../utils";
 
- export default function PrivateRoute() {
-    const [ok, setOk] = useState(false);
-    const [auth, setAuth] = useAuth();
-    const navigate = useNavigate();
+/**
+ * Guards routes that need a signed-in user.
+ * Fix: on a page refresh `auth.token` is empty for the first render (it is
+ * restored from localStorage in an effect), which used to bounce signed-in
+ * users to /login. We now wait when a saved session exists.
+ */
+export default function PrivateRoute() {
+  const [ok, setOk] = useState(false);
+  const [failed, setFailed] = useState(false);
+  const [auth] = useAuth();
+  const navigate = useNavigate();
+  const location = useLocation();
 
-    useEffect(() => {
-        const authCheck = async() => {
-            const res = await axios.get(`${APIUrl}/userauth`, {
-                headers: {
-                    "Authorization": auth?.token                            
-                }
-            } );
+  useEffect(() => {
+    let alive = true;
+    const token = auth?.token;
 
-            console.log(res);
-        
-            if(res.data?.ok){
-                setOk(true);
-            }else{
-                setOk(false);
-            }
+    if (!token) {
+      if (!localStorage.getItem("auth")) {
+        navigate("/login", { state: location.pathname, replace: true });
+      }
+      return undefined;
+    }
 
-        console.log(res.data.ok);
-           
-       
-   
-        // console.log(auth?.token);
+    (async () => {
+      try {
+        const res = await axios.get(`${APIUrl}/userauth`, {
+          headers: { Authorization: token },
+        });
+        if (!alive) return;
+        setOk(!!res.data?.ok);
+        setFailed(!res.data?.ok);
+      } catch (error) {
+        console.log(error);
+        if (alive) {
+          setOk(false);
+          setFailed(true);
         }
-        if(auth?.token) {
-            authCheck()
-        }else{
-            navigate("/login");
-        }
-    }, [auth?.token]);
+      }
+    })();
 
-    return ok ? <Outlet /> : <Spinner />
- }
+    return () => {
+      alive = false;
+    };
+  }, [auth?.token]);
+
+  if (ok) return <Outlet />;
+  return failed ? <Spinner /> : <PageLoader label="Checking your session..." />;
+}

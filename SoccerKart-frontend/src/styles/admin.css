@@ -88,7 +88,42 @@
 .ad-empty { padding: 48px 20px; text-align: center; color: var(--text-2); }
 .ad-empty strong { display: block; margin-bottom: 4px; font-size: 16px; color: var(--ink); }
 .ad-skeleton { height: 14px; border-radius: 6px; background: linear-gradient(90deg, var(--surface-2) 25%, #e9edf5 37%, var(--surface-2) 63%); background-size: 400% 100%; animation: adShimmer 1.3s ease infinite; }
+
+.ad-modal-backdrop {
+  position: fixed;
+  inset: 0;
+  z-index: 999;
+  background: rgba(0, 0, 0, 0.55);
+  display: grid;
+  place-items: center;
+  padding: 20px;
+}
+
+.ad-modal {
+  width: 100%;
+  max-width: 440px;
+  max-height: 90vh;
+  overflow-y: auto;
+}
+
+.ad-modal form {
+  display: grid;
+  gap: 10px;
+}
+
+.ad-modal label {
+  font-size: 14px;
+  font-weight: 600;
+}
+
+
+
+
 @keyframes adShimmer { 0% { background-position: 100% 50%; } 100% { background-position: 0 50%; } }
+
+
+
+
 
 @media (max-width: 900px) {
   .ad-split { grid-template-columns: 1fr; }

@@ -1,7 +1,7 @@
 .sk-hero {
   position: relative;
   margin: 28px 0 8px;
-  min-height: 480px;
+  min-height: 700px;
   display: flex;
   align-items: center;
   border-radius: var(--radius-xl);
@@ -10,8 +10,24 @@
   background-size: cover;
   background-position: center;
   box-shadow: var(--shadow-lg);
+  position: relative;
+  isolation: isolate;
+}
+.sk-hero::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  z-index: -2;
+  background-image: inherit;
+  background-size: cover;
+  background-position: center;
+  transform: scale(1);
+  transition: transform 0.5s ease;
 }
 
+.sk-hero:hover::before {
+  transform: scale(1.10);
+}
 .sk-hero-overlay {
   position: absolute;
   inset: 0;

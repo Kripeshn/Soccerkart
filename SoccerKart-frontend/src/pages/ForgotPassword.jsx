@@ -1,96 +1,90 @@
 import React, { useState } from "react";
-import Nav from "../Components/Layout/Nav";
-
-import "./Login.css";
-import { useNavigate } from "react-router-dom";
+import { NavLink, useNavigate } from "react-router-dom";
 import axios from "axios";
-import "toastr/build/toastr.min.css";
 import toastr from "toastr";
-import {APIUrl}  from '../../utils';
-
-toastr.options = {
-  closeButton: true,
-  progressBar: true,
-  positionClass: "toast-top-right",
-};
+import AuthCard, { PasswordInput } from "../Components/Form/AuthCard";
+import { APIUrl } from "../../utils";
 
 const ForgotPassword = () => {
   const [email, setEmail] = useState("");
-  const [newPassword, setNewPassword] = useState(""); 
+  const [newPassword, setNewPassword] = useState("");
   const [answer, setAnswer] = useState("");
-
+  const [loading, setLoading] = useState(false);
   const navigate = useNavigate();
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    axios
-      .post(`${APIUrl}/forgot-password`, {
-        email,
-        newPassword,
-        answer,
-      }) 
-      .then((result) => {
-        if (result.status === 200) {
-          toastr.success(`Password reset successful. Please log in.`);
-          navigate("/login");
-        } else {
-          toastr.error("Password reset failed. Please try again.");
-        }
-      })
-      .catch((err) => console.log(err));
+    setLoading(true);
+    try {
+      const result = await axios.post(`${APIUrl}/forgot-password`, { email, newPassword, answer });
+      if (result.status === 200) {
+        toastr.success("Password reset successful. Please log in.");
+        navigate("/login");
+      } else {
+        toastr.error("Password reset failed. Please try again.");
+      }
+    } catch (err) {
+      console.log(err);
+      toastr.error(err.response?.data?.message || "Password reset failed. Check your details and try again.");
+    } finally {
+      setLoading(false);
+    }
   };
 
   return (
-    <div>
-      {/* <Nav className="navbar" /> */}
-      <div className="login-container">
-        <form className="login-form" onSubmit={handleSubmit}>
-          <h2>Reset Password</h2>
+    <AuthCard
+      title="Reset password"
+      subtitle="Confirm your email and security answer to set a new password"
+      footer={
+        <>
+          Remembered it? <NavLink to="/login">Back to log in</NavLink>
+        </>
+      }
+    >
+      <form className="au-form" onSubmit={handleSubmit}>
+        <div className="au-field">
+          <label className="sk-label" htmlFor="email">Email</label>
+          <input
+            id="email"
+            className="sk-input"
+            type="email"
+            placeholder="you@example.com"
+            autoComplete="email"
+            value={email}
+            onChange={(e) => setEmail(e.target.value)}
+            required
+          />
+        </div>
 
-          <div className="form-group">
-            <label htmlFor="email">Email</label>
-            <input
-              type="email"
-              id="email"
-              name="email"
-              value={email}
-              onChange={(e) => setEmail(e.target.value)}
-              required
-            />
-          </div>
+        <div className="au-field">
+          <label className="sk-label" htmlFor="answer">What is your favourite sport?</label>
+          <input
+            id="answer"
+            className="sk-input"
+            type="text"
+            placeholder="The answer you gave at signup"
+            value={answer}
+            onChange={(e) => setAnswer(e.target.value)}
+            required
+          />
+        </div>
 
-          <div className="form-group">
-            <label htmlFor="answer">Reset Question</label>
-            <input
-              type="text"
-              id="answer"
-              name="answer"
-              value={answer}
-              onChange={(e) => setAnswer(e.target.value)} 
-              placeholder="Enter your favourite sport"
-              required
-            />
-          </div>
+        <div className="au-field">
+          <label className="sk-label" htmlFor="password">New password</label>
+          <PasswordInput
+            id="password"
+            placeholder="Enter a new password"
+            autoComplete="new-password"
+            value={newPassword}
+            onChange={(e) => setNewPassword(e.target.value)}
+          />
+        </div>
 
-          <div className="form-group">
-            <label htmlFor="password">New Password</label>
-            <input
-              type="password"
-              id="password"
-              name="password"
-              value={newPassword} 
-              placeholder="Enter new password"
-              onChange={(e) => setNewPassword(e.target.value)} e
-              required
-            />
-          </div>
-
-          <button type="submit" className="login-button">
-            Reset
-          </button>
-        </form>
-      </div>
-    </div>
+        <button type="submit" className="sk-btn sk-btn--primary au-submit" disabled={loading}>
+          {loading ? "Resetting..." : "Reset password"}
+        </button>
+      </form>
+    </AuthCard>
   );
 };
 

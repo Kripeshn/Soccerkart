@@ -21,7 +21,7 @@
 }
 
 .logo { display: flex; align-items: center; flex-shrink: 0; }
-.logo img { height: 40px; width: auto; display: block; }
+.logo img { height: 65px; width: auto; display: block; }
 
 /* ── Links ── */
 .panel { display: flex; align-items: center; flex: 1; }
