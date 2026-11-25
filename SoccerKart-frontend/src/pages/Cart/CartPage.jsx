@@ -1,6 +1,5 @@
 import React, { useMemo } from "react";
-import { Link } from "react-router-dom";
-import toastr from "toastr";
+import { Link, useNavigate } from "react-router-dom";
 import { FaMinus, FaPlus, FaTrash, FaShoppingBag } from "react-icons/fa";
 import { useCart } from "../../context/cart";
 import { APIUrl } from "../../../utils";
@@ -10,6 +9,7 @@ const DELIVERY_FEE = 100;
 const money = (n) => `Rs. ${Number(n).toLocaleString("en-IN")}`;
 
 const Cart = () => {
+  const navigate = useNavigate();
   const [cart, setCart] = useCart();
 
   const persist = (next) => {
@@ -105,7 +105,7 @@ const Cart = () => {
           <button
             type="button"
             className="sk-btn sk-btn--primary ct-checkout"
-            onClick={() => toastr.info("Checkout is not available yet.")}
+            onClick={() => navigate("/checkout")}
           >
             Proceed to checkout
           </button>

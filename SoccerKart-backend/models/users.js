@@ -22,6 +22,16 @@ const SoccerSchema = new mongoose.Schema({
     role: {
         type: Number,
         default: 0
+    },
+    phone: {
+        type: String,
+        trim: true,
+        default: ""
+    },
+    address: {
+        type: String,
+        trim: true,
+        default: ""
     }
 }, {timestamps: true});
 

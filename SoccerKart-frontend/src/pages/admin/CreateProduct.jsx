@@ -59,7 +59,7 @@ const CreateProduct = () => {
       }
     } catch (error) {
       console.log(error);
-      toastr.error(error.response?.data?.message || "Something went wrong");
+      toastr.error(error.response?.data?.error || error.response?.data?.message || "Something went wrong");
     } finally {
       setSubmitting(false);
     }

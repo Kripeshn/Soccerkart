@@ -10,8 +10,7 @@ const {requireSignIn, isAdmin} = require("./middleware/authMiddleware.js");
 // const router = require("./routes/authRoute.js");
 const categoryRoutes = require('./routes/categoryRoutes.js')
 const productRoutes = require('./routes/productRoutes.js')
-const userRoutes = require("./routes/userRoutes.js");
-const orderRoutes = require("./routes/orderRoutes");
+const orderRoutes = require('./routes/orderRoutes.js')
 
 
 //configure env
@@ -25,9 +24,7 @@ app.use(cors());
 app.use('/api/v1/auth', authRoutes);
 app.use('/api/v1/category', categoryRoutes);
 app.use('/api/v1/product', productRoutes);
-app.use('/api/v1/user', userRoutes);
 app.use('/api/v1/order', orderRoutes);
-
 
 const PORT = process.env.PORT || 8080;
 const MONGO_URL = process.env.MONGO_URL;
@@ -63,7 +60,9 @@ app.post('/login', (req, res) => {
               id: user._id, 
               name: user.name, 
               email: user.email, 
-              role: user.role // Include the role of the user
+              role: user.role, // Include the role of the user
+              phone: user.phone || "",
+              address: user.address || ""
             }
           });
           
@@ -74,6 +73,10 @@ app.post('/login', (req, res) => {
       }else{
         res.json("No record exists")
       }
+    })
+    .catch((error) => {
+      console.error(error);
+      res.status(500).json({ error: "Internal Server error." });
     })
 
 })
@@ -97,7 +100,8 @@ app.post('/register', (req, res) => {
         });
       })
       .then(newUser => {
-        res.status(201).json({message:  "User Registered Successfully", user: newUser});
+        const { password: _pw, answer: _answer, ...safeUser } = newUser.toObject();
+        res.status(201).json({message:  "User Registered Successfully", user: safeUser});
       });
     })
     .catch(error => {

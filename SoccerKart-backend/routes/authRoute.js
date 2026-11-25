@@ -1,18 +1,25 @@
 const express = require("express");
-const registerController = require('../controllers/authController.js');
-// const isAdmin = require('../middleware/authMiddleware.js/');
-const {requireSignIn} = require('../middleware/authMiddleware.js')
+const {
+    registerController,
+    getAllUsersController,
+    getProfileController,
+    updateProfileController,
+} = require('../controllers/authController.js');
+const { requireSignIn, isAdmin } = require('../middleware/authMiddleware.js')
 
-//router object
 const router = express.Router();
-
 
 router.post('/register', registerController);
 
-// protectedroute auth
 router.get("/userauth", requireSignIn, (req, res) => {
     res.status(200).send({ok: true});
-    console.log(ok);
 });
+
+// admin: all users  ->  GET /api/v1/auth/users
+router.get("/users", requireSignIn, isAdmin, getAllUsersController);
+
+// signed-in user: own profile  ->  GET / PUT /api/v1/auth/profile
+router.get("/profile", requireSignIn, getProfileController);
+router.put("/profile", requireSignIn, updateProfileController);
 
 module.exports = router;

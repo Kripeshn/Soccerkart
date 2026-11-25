@@ -185,7 +185,7 @@ const deleteProductController = async (req, res) => {
       let args = {}
       if (checked.length > 0) args.category = checked
       if (radio.length) args.price = {$gte: radio[0], $lte: radio[1]};
-      const products = await Product.find(args)
+      const products = await Product.find(args).select("-photo")
       res.status(200).send({
         success: true,
         products,

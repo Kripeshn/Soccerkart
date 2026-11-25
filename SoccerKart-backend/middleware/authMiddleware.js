@@ -1,61 +1,37 @@
-
 const JWT = require("jsonwebtoken");
 const User1 = require("../models/users");
 
-// Verify user token
+//Protected Route Token Based
 const requireSignIn = (req, res, next) => {
-  try {
     const token = req.headers.authorization;
 
     if (!token) {
-      return res.status(401).json({
-        success: false,
-        message: "Access Denied: No token provided",
-      });
+        return res.status(403).json({ error: "Access Denied: No token provided" });
     }
 
-    const decoded = JWT.verify(token, process.env.JWT_SECRET);
+    let decoded;
+    try {
+        decoded = JWT.verify(token, process.env.JWT_SECRET);
+    } catch (error) {
+        // Previously this only logged, so an expired/invalid token left the request hanging forever.
+        console.log(error.message);
+        return res.status(401).json({ error: "Invalid or expired token" });
+    }
 
     req.user = decoded;
     next();
+}
 
-  } catch (error) {
-    return res.status(401).json({
-      success: false,
-      message: "Invalid or expired token",
-    });
-  }
-};
-
-// Check admin role
 const isAdmin = async (req, res, next) => {
-  try {
-    const user = await User1.findById(req.user.userID);
-
-    if (!user) {
-      return res.status(404).json({
-        success: false,
-        message: "User not found",
-      });
+    try {
+        const user = await User1.findById(req.user.userID)
+        if (!user || user.role !== 1) {
+            return res.status(403).json({ error: "Access denied, admin only" });
+        }
+        next();
+    } catch (error) {
+        res.status(500).json({ error: "Internal Server Error" });
     }
+}
 
-    if (user.role !== 1) {
-      return res.status(403).json({
-        success: false,
-        message: "Access denied, admin only",
-      });
-    }
-
-    next();
-
-  } catch (error) {
-    console.log(error);
-
-    return res.status(500).json({
-      success: false,
-      message: "Internal Server Error",
-    });
-  }
-};
-
-module.exports = { requireSignIn, isAdmin };
+module.exports = {requireSignIn, isAdmin};
